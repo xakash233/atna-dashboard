@@ -1,8 +1,7 @@
 "use client";
-import AnimatedButton from "@/components/ui/AnimatedButton";
 
 import { useState } from "react";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import { FadeIn, Stagger, StaggerItem } from "@/components/ui/Motion";
 import type { CustomerMgmtData, CustomerMgmtOrg, CustomerMgmtTab } from "@/lib/api/customerManagement";
 import { cn } from "@/lib/cn";
@@ -15,58 +14,352 @@ const TABS: { id: CustomerMgmtTab; label: string }[] = [
 ];
 
 const MOCK_BRANCHES = [
-  { name: "Central HQ", code: "CHQ-01", location: "Pandharpur, MH", manager: "Santhosh Kumar", status: "Active" },
-  { name: "Pune Tech Lab", code: "PTL-02", location: "Pune, MH", manager: "Rohan K.", status: "Active" },
-  { name: "Mumbai Ops Hub", code: "MOH-03", location: "Mumbai, MH", manager: "Sneha A.", status: "Active" }
+  { name: "Central HQ", code: "CHQ-01", location: "Pandharpur, MH", manager: "Santhosh Kumar", status: "Active" as const },
+  { name: "Pune Tech Lab", code: "PTL-02", location: "Pune, MH", manager: "Rohan K.", status: "Active" as const },
+  { name: "Mumbai Ops Hub", code: "MOH-03", location: "Mumbai, MH", manager: "Sneha A.", status: "Active" as const },
 ];
 
 const MOCK_USERS = [
-  { name: "Santhosh Kumar", email: "santhoshatna@yopmail.com", role: "QA SuperAdmin", status: "Active" },
-  { name: "Rohan K.", email: "rohan@yopmail.com", role: "QA Engineer", status: "Active" },
-  { name: "Sneha A.", email: "sneha@yopmail.com", role: "Operations Lead", status: "Active" },
-  { name: "Amit S.", email: "amit@yopmail.com", role: "Viewer", status: "Inactive" }
+  { name: "Santhosh Kumar", email: "santhoshatna@yopmail.com", role: "QA SuperAdmin", status: "Active" as const },
+  { name: "Rohan K.", email: "rohan@yopmail.com", role: "QA Engineer", status: "Active" as const },
+  { name: "Sneha A.", email: "sneha@yopmail.com", role: "Operations Lead", status: "Active" as const },
+  { name: "Amit S.", email: "amit@yopmail.com", role: "Viewer", status: "Inactive" as const },
 ];
 
 const MOCK_ROLES = [
   { name: "QA SuperAdmin", users: 1, permissions: "Full Access (All Modules)" },
   { name: "QA Engineer", users: 5, permissions: "Read/Write Cases, Tracker" },
   { name: "Operations Lead", users: 2, permissions: "Read/Write Customers" },
-  { name: "Viewer", users: 4, permissions: "Read-only access" }
+  { name: "Viewer", users: 4, permissions: "Read-only access" },
 ];
 
-function DetailField({ label, children }: { label: string; children: React.ReactNode }) {
+const cardShell =
+  "rounded-2xl border border-[#e2e8f0] bg-white shadow-[0_1px_3px_rgba(0,0,0,0.01),0_8px_16px_rgba(0,0,0,0.01)] transition-all duration-300";
+
+/** Matches Organization overview field hover */
+const indigoHover =
+  "hover:border-[#6366f1]/40 hover:bg-white hover:shadow-[0_8px_20px_-10px_rgba(99,102,241,0.25)]";
+const indigoHoverShadowSoft =
+  "hover:border-[#6366f1]/50 hover:shadow-[0_12px_24px_rgba(99,102,241,0.08)]";
+const indigoBar = "from-[#6366f1] to-[#00d8a6]";
+const indigoLabelHover = "group-hover:text-[#6366f1]";
+const indigoActiveBorder = "border-[#6366f1]/40 bg-white";
+const indigoFocusRow =
+  "translate-x-1 border-[#6366f1]/40 bg-white shadow-[0_8px_20px_-10px_rgba(99,102,241,0.25)]";
+const indigoUnderline =
+  "absolute bottom-0 left-0 right-0 h-0.5 origin-left scale-x-0 bg-gradient-to-r from-[#6366f1] to-[#00d8a6] transition-transform duration-300 group-hover:scale-x-100";
+
+function StatusPill({ status }: { status: "Active" | "Inactive" }) {
+  const active = status === "Active";
   return (
-    <div className="space-y-1.5 border-b border-[rgba(180,168,204,0.2)] py-4 last:border-0 sm:border-0 sm:py-0">
-      <p className="text-xs font-medium text-pastel-muted">{label}</p>
-      <div className="text-sm font-semibold text-pastel-text">{children}</div>
-    </div>
+    <span
+      className={cn(
+        "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide",
+        active
+          ? "bg-[#e6fbf7] text-[#0f766e] border border-[#a7f3d0]"
+          : "bg-[#f1f5f9] text-[#64748b] border border-[#e2e8f0]",
+      )}
+    >
+      <span className={cn("size-1.5 rounded-full", active ? "bg-[#00d8a6]" : "bg-[#94a3b8]")} />
+      {status}
+    </span>
+  );
+}
+
+function SummaryCards() {
+  const items = [
+    {
+      id: "overview",
+      label: "Organization",
+      value: "1",
+      hint: "Central level",
+    },
+    {
+      id: "branch",
+      label: "Branches",
+      value: String(MOCK_BRANCHES.length),
+      hint: "All active",
+    },
+    {
+      id: "users",
+      label: "Users",
+      value: String(MOCK_USERS.length),
+      hint: `${MOCK_USERS.filter((u) => u.status === "Active").length} active`,
+    },
+    {
+      id: "roles",
+      label: "Roles",
+      value: String(MOCK_ROLES.length),
+      hint: "Permission scopes",
+    },
+  ];
+
+  return (
+    <Stagger className="grid w-full grid-cols-2 gap-3 lg:grid-cols-4">
+      {items.map((item) => (
+        <StaggerItem key={item.id}>
+          <article
+            className={cn(
+              cardShell,
+              "group relative h-full w-full overflow-hidden p-4 transition-all duration-300 hover:-translate-y-1",
+              indigoHoverShadowSoft,
+            )}
+          >
+            <div
+              className={cn(
+                "absolute bottom-0 left-0 right-0 h-1 origin-left scale-x-0 bg-gradient-to-r transition-transform duration-500 group-hover:scale-x-100",
+                indigoBar,
+              )}
+            />
+            <p className="text-[9px] font-semibold uppercase tracking-wider text-[#64748b]">{item.label}</p>
+            <p className="mt-2 font-sans text-[22px] font-semibold leading-none text-[#0f172a] transition-transform duration-300 group-hover:scale-105">
+              {item.value}
+            </p>
+            <p className="mt-2 text-[9px] font-medium uppercase tracking-wide text-[#94a3b8]">{item.hint}</p>
+          </article>
+        </StaggerItem>
+      ))}
+    </Stagger>
   );
 }
 
 function OrganizationOverview({ org }: { org: CustomerMgmtOrg }) {
+  const [hovered, setHovered] = useState<string | null>(null);
+
+  const fields = [
+    { key: "name", label: "Organization name", value: org.name },
+    { key: "code", label: "Organization code", value: org.code },
+    { key: "level", label: "Organization level", value: org.level },
+    { key: "parent", label: "Parent organization", value: org.parentOrganization },
+    { key: "address", label: "Address", value: org.address, wide: true },
+    { key: "date", label: "Created date", value: org.createdDate, wide: true },
+  ];
+
   return (
-    <section className="pastel-card p-6 sm:p-8">
-      <h2 className="text-lg font-semibold text-pastel-text">Organization overview</h2>
-      <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
-        <DetailField label="Organization name">{org.name}</DetailField>
-        <DetailField label="Organization code">{org.code}</DetailField>
-        <DetailField label="Organization level">{org.level}</DetailField>
-        <DetailField label="Parent organization">{org.parentOrganization}</DetailField>
-        <div className="sm:col-span-2">
-          <DetailField label="Address">{org.address}</DetailField>
+    <div className="flex h-full min-h-0 flex-1 flex-col gap-3">
+      <section className={cn(cardShell, "flex min-h-0 flex-1 flex-col p-4 sm:p-5")}>
+        <div className="mb-4 flex shrink-0 items-center justify-between gap-3">
+          <div>
+            <h2 className="text-[10px] font-semibold uppercase tracking-wider text-[#0f172a]">
+              Organization overview
+            </h2>
+            <p className="mt-0.5 text-[9px] font-medium text-[#64748b]">
+              Core identity and hierarchy details
+            </p>
+          </div>
+          <StatusPill status="Active" />
         </div>
-        <DetailField label="Created by">
-          <div className="flex items-center gap-3">
-            <div className="grid size-10 place-items-center rounded-full bg-pastel-lavender/50 text-sm font-bold text-pastel-text">
-              {org.createdByInitial}
+
+        <div className="grid min-h-0 flex-1 grid-cols-1 content-start gap-2.5 sm:grid-cols-2">
+          {fields.map((field) => (
+            <div
+              key={field.key}
+              onMouseEnter={() => setHovered(field.key)}
+              onMouseLeave={() => setHovered(null)}
+              className={cn(
+                "group cursor-default rounded-xl border border-[#e2e8f0] bg-[#f8fafc] px-3.5 py-3 transition-all duration-300 hover:-translate-y-0.5",
+                indigoHover,
+                field.wide && "sm:col-span-2",
+                hovered === field.key && indigoActiveBorder,
+              )}
+            >
+              <p className={cn("text-[9px] font-semibold uppercase tracking-wide text-[#94a3b8] transition-colors", indigoLabelHover)}>
+                {field.label}
+              </p>
+              <p className="mt-1.5 text-[12px] font-semibold text-[#0f172a]">{field.value}</p>
             </div>
-            <div>
-              <p className="font-semibold text-pastel-text">{org.createdByName}</p>
-              <p className="text-xs font-normal text-pastel-muted">{org.createdByEmail}</p>
+          ))}
+
+          <div
+            onMouseEnter={() => setHovered("creator")}
+            onMouseLeave={() => setHovered(null)}
+            className={cn(
+              "group cursor-default rounded-xl border border-[#e2e8f0] bg-[#f8fafc] px-3.5 py-3 transition-all duration-300 hover:-translate-y-0.5 sm:col-span-2",
+              indigoHover,
+              hovered === "creator" && indigoActiveBorder,
+            )}
+          >
+            <p className={cn("text-[9px] font-semibold uppercase tracking-wide text-[#94a3b8] transition-colors", indigoLabelHover)}>
+              Created by
+            </p>
+            <div className="mt-2 flex items-center gap-3">
+              <div className="grid size-9 place-items-center rounded-full bg-gradient-to-br from-[#6366f1] to-[#00d8a6] text-[11px] font-bold text-white transition-transform duration-300 group-hover:scale-110">
+                {org.createdByInitial}
+              </div>
+              <div>
+                <p className="text-[12px] font-semibold text-[#0f172a]">{org.createdByName}</p>
+                <p className="text-[10px] font-medium text-[#64748b]">{org.createdByEmail}</p>
+              </div>
             </div>
           </div>
-        </DetailField>
-        <DetailField label="Created date">{org.createdDate}</DetailField>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function BranchPanel() {
+  const [selected, setSelected] = useState<string | null>(MOCK_BRANCHES[0]?.code ?? null);
+
+  return (
+    <section className={cn(cardShell, "flex h-full min-h-0 flex-1 flex-col p-4 sm:p-5")}>
+      <div className="mb-4 flex shrink-0 items-center justify-between gap-3">
+        <div>
+          <h2 className="text-[10px] font-semibold uppercase tracking-wider text-[#0f172a]">Branches</h2>
+          <p className="mt-0.5 text-[9px] font-medium text-[#64748b]">Select a branch to highlight details</p>
+        </div>
+        <button
+          type="button"
+          className="overflow-hidden rounded-full border-0 bg-gradient-to-r from-[#6366f1] to-[#00d8a6] px-4 py-2 text-[10px] font-semibold text-white shadow-sm transition-all duration-200 hover:scale-[1.02] active:scale-95"
+        >
+          + Add Branch
+        </button>
+      </div>
+
+      <div className="grid min-h-0 flex-1 grid-cols-1 content-start gap-2.5 md:grid-cols-3">
+        {MOCK_BRANCHES.map((b) => {
+          const active = selected === b.code;
+          return (
+            <button
+              key={b.code}
+              type="button"
+              onClick={() => setSelected(b.code)}
+              className={cn(
+                "group relative overflow-hidden rounded-xl border p-4 text-left transition-all duration-300 hover:-translate-y-1",
+                active
+                  ? "border-[#6366f1]/50 bg-gradient-to-b from-white to-[#eef2ff]/60 shadow-[0_10px_24px_-12px_rgba(99,102,241,0.35)]"
+                  : cn("border-[#e2e8f0] bg-[#f8fafc]", indigoHover),
+              )}
+            >
+              <div className="flex items-start justify-between gap-2">
+                <p className="text-[12px] font-semibold text-[#0f172a]">{b.name}</p>
+                <StatusPill status={b.status} />
+              </div>
+              <p className="mt-2 font-mono text-[10px] font-semibold text-[#6366f1]">{b.code}</p>
+              <p className="mt-2 text-[10px] font-medium text-[#64748b]">{b.location}</p>
+              <p className="mt-1 text-[10px] font-semibold text-[#0f172a]">Mgr · {b.manager}</p>
+              <div
+                className={cn(
+                  indigoUnderline,
+                  active && "scale-x-100",
+                )}
+              />
+            </button>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+function UsersPanel() {
+  const [focused, setFocused] = useState<string | null>(null);
+
+  return (
+    <section className={cn(cardShell, "flex h-full min-h-0 flex-1 flex-col p-4 sm:p-5")}>
+      <div className="mb-4 flex shrink-0 items-center justify-between gap-3">
+        <div>
+          <h2 className="text-[10px] font-semibold uppercase tracking-wider text-[#0f172a]">
+            Organization users
+          </h2>
+          <p className="mt-0.5 text-[9px] font-medium text-[#64748b]">Hover a row to spotlight the member</p>
+        </div>
+        <button
+          type="button"
+          className="overflow-hidden rounded-full border-0 bg-gradient-to-r from-[#6366f1] to-[#00d8a6] px-4 py-2 text-[10px] font-semibold text-white shadow-sm transition-all duration-200 hover:scale-[1.02] active:scale-95"
+        >
+          + Invite User
+        </button>
+      </div>
+
+      <ul className="flex min-h-0 flex-1 flex-col gap-2">
+        {MOCK_USERS.map((u) => {
+          const on = focused === u.email;
+          return (
+            <li
+              key={u.email}
+              onMouseEnter={() => setFocused(u.email)}
+              onMouseLeave={() => setFocused(null)}
+              className={cn(
+                "flex flex-wrap items-center justify-between gap-3 rounded-xl border px-3.5 py-3 transition-all duration-300",
+                on
+                  ? indigoFocusRow
+                  : cn("border-[#e2e8f0] bg-[#f8fafc]", indigoHover),
+              )}
+            >
+              <div className="flex items-center gap-3">
+                <div
+                  className={cn(
+                    "grid size-8 place-items-center rounded-full text-[10px] font-bold transition-all duration-300",
+                    on
+                      ? "scale-110 bg-gradient-to-br from-[#6366f1] to-[#00d8a6] text-white"
+                      : "bg-[#e2e8f0] text-[#475569]",
+                  )}
+                >
+                  {u.name.charAt(0)}
+                </div>
+                <div>
+                  <p className="text-[12px] font-semibold text-[#0f172a]">{u.name}</p>
+                  <p className="text-[10px] font-medium text-[#64748b]">{u.email}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="rounded-full border border-[#e2e8f0] bg-white px-2 py-0.5 text-[9px] font-semibold text-[#475569]">
+                  {u.role}
+                </span>
+                <StatusPill status={u.status} />
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  );
+}
+
+function RolesPanel() {
+  return (
+    <section className={cn(cardShell, "flex h-full min-h-0 flex-1 flex-col p-4 sm:p-5")}>
+      <div className="mb-4 flex shrink-0 items-center justify-between gap-3">
+        <div>
+          <h2 className="text-[10px] font-semibold uppercase tracking-wider text-[#0f172a]">
+            Role management
+          </h2>
+          <p className="mt-0.5 text-[9px] font-medium text-[#64748b]">Permission scopes across the workspace</p>
+        </div>
+        <button
+          type="button"
+          className="overflow-hidden rounded-full border-0 bg-gradient-to-r from-[#6366f1] to-[#00d8a6] px-4 py-2 text-[10px] font-semibold text-white shadow-sm transition-all duration-200 hover:scale-[1.02] active:scale-95"
+        >
+          + New Role
+        </button>
+      </div>
+
+      <div className="grid min-h-0 flex-1 grid-cols-1 content-start gap-2.5 sm:grid-cols-2">
+        {MOCK_ROLES.map((r) => (
+            <article
+              key={r.name}
+              className={cn(
+                "group relative overflow-hidden rounded-xl border border-[#e2e8f0] bg-[#f8fafc] p-4 transition-all duration-300 hover:-translate-y-1",
+                indigoHover,
+              )}
+            >
+              <div className="flex items-start justify-between gap-2">
+                <p className="text-[12px] font-semibold text-[#0f172a]">{r.name}</p>
+                <span className="rounded-full border border-[#e2e8f0] bg-white px-2 py-0.5 text-[9px] font-semibold text-[#475569]">
+                  {r.users} users
+                </span>
+              </div>
+              <p className="mt-2 text-[10px] font-medium leading-relaxed text-[#64748b]">{r.permissions}</p>
+              <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-[#e2e8f0]">
+                <div
+                  className={cn("h-full rounded-full bg-gradient-to-r transition-all duration-700", indigoBar)}
+                  style={{ width: `${Math.min(r.users * 18, 100)}%` }}
+                />
+              </div>
+              <div className={indigoUnderline} />
+            </article>
+          ))}
       </div>
     </section>
   );
@@ -76,175 +369,80 @@ export function CustomerManagementPage({ data }: { data: CustomerMgmtData }) {
   const [tab, setTab] = useState<CustomerMgmtTab>("overview");
 
   return (
-    <div className="mx-auto flex w-full max-w-[1000px] flex-col gap-5">
+    <div className="flex w-full min-h-[calc(100vh-7rem)] flex-col gap-3 font-sans text-[#0f172a] antialiased">
       <FadeIn>
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mb-1 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <p className="text-xs font-medium uppercase tracking-[0.16em] text-pastel-muted">
-              General
-            </p>
-            <h1 className="mt-1 text-2xl font-bold tracking-tight text-pastel-text sm:text-[28px]">
+            <p className="text-[9px] font-semibold uppercase tracking-[0.16em] text-[#94a3b8]">General</p>
+            <h1 className="mt-1 font-sans text-xl font-semibold tracking-wide text-[#0f172a] sm:text-[28px]">
               Customer management
             </h1>
-            <p className="mt-1 text-sm text-pastel-muted">Manage organization, user, roles</p>
+            <p className="mt-1 text-[10px] font-medium text-[#64748b]">
+              Manage organization, user, roles
+            </p>
           </div>
-          <AnimatedButton type="button" className="btn-premium px-4 py-2.5 text-xs font-semibold self-start sm:self-center">
+          <button
+            type="button"
+            className="inline-flex self-start items-center overflow-hidden rounded-full border-0 bg-gradient-to-r from-[#6366f1] to-[#00d8a6] px-5 py-2.5 text-[10px] font-semibold text-white shadow-md transition-all duration-200 hover:scale-[1.02] active:scale-95 sm:self-center"
+          >
             Modify Settings
-          </AnimatedButton>
+          </button>
         </div>
       </FadeIn>
 
-      <Stagger className="flex flex-col gap-5" delay={0.04}>
-        <StaggerItem>
-          <div
-            role="tablist"
-            aria-label="Customer management sections"
-            className="flex flex-wrap gap-2 rounded-xl bg-surface-muted/50 p-1 border border-border/10 w-fit"
+      <FadeIn delay={0.04}>
+        <SummaryCards />
+      </FadeIn>
+
+      <FadeIn delay={0.08} className="flex min-h-0 flex-1 flex-col gap-3">
+        <div
+          role="tablist"
+          aria-label="Customer management sections"
+          className="grid w-full grid-cols-2 gap-1 rounded-xl border border-white/40 bg-white/25 p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] backdrop-blur-md sm:grid-cols-4"
+        >
+          {TABS.map((item) => {
+            const active = tab === item.id;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                role="tab"
+                aria-selected={active}
+                onClick={() => setTab(item.id)}
+                className={cn(
+                  "relative z-10 w-full rounded-lg px-3 py-2.5 text-center text-[11px] font-semibold transition-colors duration-200",
+                  active ? "text-[#0f172a]" : "text-[#64748b] hover:text-[#6366f1]",
+                )}
+              >
+                {active && (
+                  <motion.span
+                    layoutId="customer-tab-pill"
+                    className="absolute inset-0 -z-10 rounded-lg border border-white/50 bg-white/35 shadow-[0_4px_16px_-6px_rgba(15,23,42,0.12)] backdrop-blur-md"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+                {item.label}
+              </button>
+            );
+          })}
+        </div>
+
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={tab}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            className="flex min-h-0 flex-1 flex-col"
           >
-            {TABS.map((item) => {
-              const active = tab === item.id;
-              return (
-                <AnimatedButton
-                  key={item.id}
-                  type="button"
-                  role="tab"
-                  aria-selected={active}
-                  onClick={() => setTab(item.id)}
-                  className={cn(
-                    "relative rounded-lg px-4 py-2 text-sm font-medium transition cursor-pointer z-10",
-                    active ? "text-pastel-text" : "text-pastel-muted hover:text-pastel-text",
-                  )}
-                >
-                  {active && (
-                    <motion.span
-                      layoutId="customer-tab-pill"
-                      className="absolute inset-0 -z-10 rounded-lg bg-white shadow-sm dark:bg-pastel-card"
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                    />
-                  )}
-                  {item.label}
-                </AnimatedButton>
-              );
-            })}
-          </div>
-        </StaggerItem>
-
-        <StaggerItem>
-          {tab === "overview" && <OrganizationOverview org={data.org} />}
-          
-          {tab === "branch" && (
-            <section className="pastel-card p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-base font-semibold text-pastel-text">Branches</h2>
-                <AnimatedButton type="button" className="rounded-lg bg-accent-soft px-3 py-1.5 text-xs font-bold text-accent">
-                  + Add Branch
-                </AnimatedButton>
-              </div>
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-sm">
-                  <thead>
-                    <tr className="border-b border-border/15 text-pastel-muted">
-                      <th className="pb-3 font-semibold">Name</th>
-                      <th className="pb-3 font-semibold">Code</th>
-                      <th className="pb-3 font-semibold">Location</th>
-                      <th className="pb-3 font-semibold">Manager</th>
-                      <th className="pb-3 font-semibold">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-border/10">
-                    {MOCK_BRANCHES.map((b) => (
-                      <tr key={b.code} className="table-row-premium">
-                        <td className="py-3 font-medium text-pastel-text">{b.name}</td>
-                        <td className="py-3 font-mono text-xs text-pastel-muted">{b.code}</td>
-                        <td className="py-3 text-pastel-text">{b.location}</td>
-                        <td className="py-3 text-pastel-text">{b.manager}</td>
-                        <td className="py-3">
-                          <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-2 py-0.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-                            {b.status}
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </section>
-          )}
-
-          {tab === "users" && (
-            <section className="pastel-card p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-base font-semibold text-pastel-text">Organization Users</h2>
-                <AnimatedButton type="button" className="rounded-lg bg-accent-soft px-3 py-1.5 text-xs font-bold text-accent">
-                  + Invite User
-                </AnimatedButton>
-              </div>
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-sm">
-                  <thead>
-                    <tr className="border-b border-border/15 text-pastel-muted">
-                      <th className="pb-3 font-semibold">Name</th>
-                      <th className="pb-3 font-semibold">Email</th>
-                      <th className="pb-3 font-semibold">Role</th>
-                      <th className="pb-3 font-semibold">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-border/10">
-                    {MOCK_USERS.map((u) => (
-                      <tr key={u.email} className="table-row-premium">
-                        <td className="py-3 font-medium text-pastel-text">{u.name}</td>
-                        <td className="py-3 text-pastel-muted">{u.email}</td>
-                        <td className="py-3 text-pastel-text">{u.role}</td>
-                        <td className="py-3">
-                          <span className={cn(
-                            "inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-semibold",
-                            u.status === "Active"
-                              ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-                              : "bg-neutral-500/10 text-neutral-600 dark:text-neutral-400"
-                          )}>
-                            {u.status}
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </section>
-          )}
-
-          {tab === "roles" && (
-            <section className="pastel-card p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-base font-semibold text-pastel-text">Role Management</h2>
-                <AnimatedButton type="button" className="rounded-lg bg-accent-soft px-3 py-1.5 text-xs font-bold text-accent">
-                  + New Role
-                </AnimatedButton>
-              </div>
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-sm">
-                  <thead>
-                    <tr className="border-b border-border/15 text-pastel-muted">
-                      <th className="pb-3 font-semibold">Role</th>
-                      <th className="pb-3 font-semibold">Assigned Users</th>
-                      <th className="pb-3 font-semibold">Scope / Permissions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-border/10">
-                    {MOCK_ROLES.map((r) => (
-                      <tr key={r.name} className="table-row-premium">
-                        <td className="py-3 font-medium text-pastel-text">{r.name}</td>
-                        <td className="py-3 text-pastel-text">{r.users} users</td>
-                        <td className="py-3 text-pastel-muted">{r.permissions}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </section>
-          )}
-        </StaggerItem>
-      </Stagger>
+            {tab === "overview" && <OrganizationOverview org={data.org} />}
+            {tab === "branch" && <BranchPanel />}
+            {tab === "users" && <UsersPanel />}
+            {tab === "roles" && <RolesPanel />}
+          </motion.div>
+        </AnimatePresence>
+      </FadeIn>
     </div>
   );
 }

@@ -10,7 +10,7 @@ import { useTheme } from "next-themes";
 import { useAccent } from "@/providers/AccentProvider";
 
 const MOBILE_LINKS = [
-  { href: "/", label: "Tracker", icon: "tracker" },
+  { href: "/", label: "Dashboard", icon: "tracker" },
   { href: "/customers", label: "Customers", icon: "customers" },
   { href: "/cases", label: "Cases", icon: "cases" },
   { href: "/workflows", label: "Workflows", icon: "workflows" },

@@ -8,7 +8,7 @@ export function PastelShell({ children }: { children: React.ReactNode }) {
       <AtnaSidebar />
       <div className="flex min-h-full flex-col md:pl-[var(--sidebar-width)]">
         <AtnaTopBar />
-        <main className="relative z-10 flex-1 px-4 py-6 sm:px-6 lg:px-8 lg:py-8 pb-28 md:pb-8">
+        <main className="relative z-10 flex-1 px-3 py-3 sm:px-4 lg:px-5 lg:py-4 pb-24 md:pb-4">
           {children}
         </main>
       </div>

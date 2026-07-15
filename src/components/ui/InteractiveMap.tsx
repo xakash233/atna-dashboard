@@ -198,7 +198,7 @@ export default function InteractiveMap() {
   }, []);
 
   return (
-    <div id="interactive-map-container" className="relative w-full h-[380px] rounded-2xl overflow-hidden border border-slate-200 bg-slate-50">
+    <div id="interactive-map-container" className="relative w-full h-full min-h-[300px] rounded-2xl overflow-hidden border border-slate-200 bg-slate-50">
       <div ref={mapContainer} className="w-full h-full" style={{ zIndex: 1 }} />
     </div>
   );

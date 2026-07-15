@@ -1,6 +1,6 @@
 "use client";
-import AnimatedButton from "@/components/ui/AnimatedButton";
 
+import AnimatedButton from "@/components/ui/AnimatedButton";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -11,10 +11,16 @@ import { cn } from "@/lib/cn";
 import { useAccent } from "@/providers/AccentProvider";
 
 const HYRE_LINKS = [
-  { href: "/hyre/resume-agent", label: "Resume Agent" },
-  { href: "/hyre/fraud", label: "AI Fraud" },
-  { href: "/hyre/deepfake", label: "Deepfake" },
-  { href: "/hyre/documents", label: "TRU. Doc" },
+  { href: "/hyre/resume-agent", label: "Resume Agent", icon: "resume" },
+  { href: "/hyre/fraud", label: "AI Fraud", icon: "fraud" },
+  { href: "/hyre/deepfake", label: "Deepfake", icon: "deepfake" },
+  { href: "/hyre/documents", label: "TRU. Doc", icon: "docs" },
+] as const;
+
+const MAIN_LINKS = [
+  { href: "/cases", label: "Case Management", icon: "cases" },
+  { href: "/workflows", label: "Workflow Builder", icon: "workflows" },
+  { href: "/support", label: "Support", icon: "support" },
 ] as const;
 
 function isActive(pathname: string, href: string) {
@@ -26,48 +32,78 @@ function isHyrePath(pathname: string) {
   return pathname === "/hyre" || pathname.startsWith("/hyre/");
 }
 
-function PersonIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 18 18" fill="none" aria-hidden>
-      <circle cx="9" cy="6" r="2.5" stroke="currentColor" strokeWidth="1.35" />
-      <path
-        d="M3.8 14.8c1.1-2.3 2.9-3.4 5.2-3.4s4.1 1.1 5.2 3.4"
-        stroke="currentColor"
-        strokeWidth="1.35"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
 function NavIcon({ name, className }: { name: string; className?: string }) {
   const c = cn("size-4 shrink-0", className);
   switch (name) {
-    case "Tracker":
+    case "dashboard":
       return (
         <svg className={c} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
-          <rect x="3" y="3" width="14" height="14" rx="2" />
-          <path d="M9 17V3M3 10h14" />
+          <rect x="3" y="3" width="6" height="6" rx="1.5" />
+          <rect x="11" y="3" width="6" height="4" rx="1.5" />
+          <rect x="11" y="9" width="6" height="8" rx="1.5" />
+          <rect x="3" y="11" width="6" height="6" rx="1.5" />
         </svg>
       );
-    case "Customers":
+    case "customers":
       return (
         <svg className={c} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
           <path d="M10 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-7 8a7 7 0 0 1 14 0" strokeLinecap="round" />
         </svg>
       );
-    case "Cases":
+    case "hire":
+      return (
+        <svg className={c} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
+          <circle cx="10" cy="6.5" r="2.5" />
+          <path d="M4.5 16c1.2-2.4 3-3.5 5.5-3.5s4.3 1.1 5.5 3.5" strokeLinecap="round" />
+        </svg>
+      );
+    case "resume":
+      return (
+        <svg className={c} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
+          <rect x="5" y="3" width="10" height="14" rx="1.5" />
+          <path d="M8 7h4M8 10h4M8 13h2" strokeLinecap="round" />
+        </svg>
+      );
+    case "fraud":
+      return (
+        <svg className={c} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
+          <path d="M10 2.5 16 5v4.5c0 3.4-2.4 5.8-6 7-3.6-1.2-6-3.6-6-7V5l6-2.5Z" />
+        </svg>
+      );
+    case "deepfake":
+      return (
+        <svg className={c} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
+          <circle cx="10" cy="10" r="7" />
+          <circle cx="10" cy="10" r="2.5" />
+          <path d="M10 3v2.5M10 14.5V17M3 10h2.5M14.5 10H17" strokeLinecap="round" />
+        </svg>
+      );
+    case "docs":
+      return (
+        <svg className={c} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
+          <path d="M6 3.5h5l3 3V16a1.5 1.5 0 0 1-1.5 1.5h-6.5A1.5 1.5 0 0 1 4.5 16V5A1.5 1.5 0 0 1 6 3.5Z" />
+          <path d="M11 3.5V7h3.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      );
+    case "cases":
       return (
         <svg className={c} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
           <path d="M3 5a2 2 0 0 1 2-2h3l2 2h5a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5Z" />
         </svg>
       );
-    case "Workflows":
+    case "workflows":
       return (
         <svg className={c} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
           <circle cx="5" cy="5" r="2.5" />
           <circle cx="15" cy="15" r="2.5" />
           <path d="M7.5 5h3a4 4 0 0 1 4 4v3.5" strokeLinecap="round" />
+        </svg>
+      );
+    case "support":
+      return (
+        <svg className={c} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
+          <circle cx="10" cy="10" r="7" />
+          <path d="M8 8a2 2 0 1 1 2.6 1.9c-.5.2-.9.6-.9 1.1V12M10 14.5v.5" strokeLinecap="round" />
         </svg>
       );
     default:
@@ -82,11 +118,13 @@ function NavIcon({ name, className }: { name: string; className?: string }) {
 function NavLink({
   href,
   label,
+  icon,
   pathname,
   collapsed,
 }: {
   href: string;
   label: string;
+  icon: string;
   pathname: string;
   collapsed: boolean;
 }) {
@@ -96,15 +134,26 @@ function NavLink({
       href={href}
       title={label}
       className={cn(
-        "relative flex items-center gap-2.5 rounded-full px-3 py-2 text-[13px] font-medium transition-colors",
+        "group relative flex items-center gap-2.5 rounded-xl px-3 py-2 text-[12.5px] font-semibold transition-all duration-200",
         active
-          ? "bg-[var(--sidebar-active)] text-white dark:bg-white dark:text-[#111827]"
-          : "text-[var(--sidebar-fg)] hover:bg-[var(--sidebar-hover)]",
-        collapsed && "justify-center px-2",
+          ? "bg-[#0f172a] text-white shadow-sm dark:bg-white dark:text-[#0f172a]"
+          : "text-[#475569] hover:translate-x-0.5 hover:bg-[#f1f5f9] hover:text-[#0f172a]",
+        collapsed && "justify-center px-2 hover:translate-x-0",
       )}
       aria-current={active ? "page" : undefined}
     >
-      <NavIcon name={label} className={active ? "text-white dark:text-[#111827]" : "text-[var(--sidebar-muted)]"} />
+      {active && (
+        <span className="absolute left-0 top-1/2 h-4 w-1 -translate-y-1/2 rounded-r-full bg-gradient-to-b from-[#6366f1] to-[#00d8a6]" />
+      )}
+      <NavIcon
+        name={icon}
+        className={cn(
+          "transition-colors duration-200",
+          active
+            ? "text-white dark:text-[#0f172a]"
+            : "text-[#94a3b8] group-hover:text-[#6366f1]",
+        )}
+      />
       {!collapsed && <span className="truncate">{label}</span>}
     </Link>
   );
@@ -123,79 +172,115 @@ export function AtnaSidebar() {
   }, [pathname]);
 
   const isDark = mounted && theme === "dark";
+  const hyreActive = isHyrePath(pathname);
 
   return (
-    <aside
-      className="fixed inset-y-0 left-0 z-40 hidden w-[var(--sidebar-width)] flex-col border-r border-[var(--sidebar-border)] bg-white/70 backdrop-blur-md md:flex"
-    >
+    <aside className="fixed inset-y-0 left-0 z-40 hidden w-[var(--sidebar-width)] flex-col border-r border-[#e2e8f0] bg-white/90 backdrop-blur-md md:flex dark:border-[var(--sidebar-border)] dark:bg-[var(--sidebar-bg)]">
+      {/* Brand */}
       <div
         className={cn(
-          "flex items-center border-b border-[var(--sidebar-border)] py-4",
+          "flex items-center border-b border-[#e2e8f0] py-4 dark:border-[var(--sidebar-border)]",
           sidebarCollapsed ? "justify-center px-2" : "gap-2.5 px-4",
         )}
       >
-        <div className="grid size-9 shrink-0 place-items-center rounded-xl bg-accent-soft">
+        <div className="grid size-9 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-[#6366f1]/15 to-[#00d8a6]/15 ring-1 ring-[#e2e8f0] transition-transform duration-200 hover:scale-105">
           <Image src="/assets/logo-hex.svg" alt="Atna" width={18} height={16} unoptimized />
         </div>
         {!sidebarCollapsed && (
           <div className="min-w-0 leading-tight">
-            <p className="truncate text-sm font-bold text-pastel-text">Atna</p>
-            <p className="truncate text-[11px] text-pastel-muted">{ORGANIZATION.name}</p>
+            <p className="truncate text-sm font-bold tracking-wide text-[#0f172a] dark:text-pastel-text">
+              Atna
+            </p>
+            <p className="truncate text-[10px] font-medium text-[#64748b]">{ORGANIZATION.name}</p>
           </div>
         )}
       </div>
 
-      <nav className="flex-1 space-y-5 overflow-y-auto px-3 py-4" aria-label="Main">
-        <div>
+      <nav className="flex-1 space-y-5 overflow-y-auto px-2.5 py-4" aria-label="Main">
+        {/* Overview */}
+        <div className="space-y-1">
           {!sidebarCollapsed && (
-            <p className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-pastel-muted">
-              Tracker
+            <p className="mb-1.5 px-3 text-[9px] font-semibold uppercase tracking-[0.16em] text-[#94a3b8]">
+              Overview
             </p>
           )}
-          <NavLink href="/" label="Tracker" pathname={pathname} collapsed={sidebarCollapsed} />
+          <NavLink
+            href="/"
+            label="Dashboard"
+            icon="dashboard"
+            pathname={pathname}
+            collapsed={sidebarCollapsed}
+          />
         </div>
 
-        <div>
+        {/* General */}
+        <div className="space-y-1">
           {!sidebarCollapsed && (
-            <p className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-pastel-muted">
+            <p className="mb-1.5 px-3 text-[9px] font-semibold uppercase tracking-[0.16em] text-[#94a3b8]">
               General
             </p>
           )}
-          <NavLink href="/customers" label="Customers" pathname={pathname} collapsed={sidebarCollapsed} />
+          <NavLink
+            href="/customers"
+            label="Customer Management"
+            icon="customers"
+            pathname={pathname}
+            collapsed={sidebarCollapsed}
+          />
         </div>
 
-        <div>
+        {/* Intelli Suite */}
+        <div className="space-y-1">
           {!sidebarCollapsed && (
-            <p className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-pastel-muted">
+            <p className="mb-1.5 px-3 text-[9px] font-semibold uppercase tracking-[0.16em] text-[#94a3b8]">
               Intelli Suite
             </p>
           )}
 
-          <div className={cn(!sidebarCollapsed && "rounded-2xl bg-surface-muted p-1.5")}>
+          <div
+            className={cn(
+              "transition-all duration-200",
+              !sidebarCollapsed && "rounded-2xl border border-transparent bg-[#f8fafc] p-1.5 hover:border-[#e2e8f0] dark:bg-surface-muted",
+            )}
+          >
             {sidebarCollapsed ? (
               <Link
                 href="/hyre/resume-agent"
                 title="Intelli Hire"
                 className={cn(
-                  "flex items-center justify-center rounded-full px-2 py-2",
-                  pathname.startsWith("/hyre")
-                    ? "bg-[var(--sidebar-active)] text-white dark:bg-white dark:text-[#111827]"
-                    : "text-[var(--sidebar-fg)] hover:bg-[var(--sidebar-hover)]",
+                  "group flex items-center justify-center rounded-xl px-2 py-2 transition-all duration-200",
+                  hyreActive
+                    ? "bg-[#0f172a] text-white dark:bg-white dark:text-[#0f172a]"
+                    : "text-[#475569] hover:bg-[#f1f5f9] hover:text-[#6366f1]",
                 )}
               >
-                <PersonIcon className="size-4" />
+                <NavIcon name="hire" className="size-4" />
               </Link>
             ) : (
               <AnimatedButton
                 type="button"
                 onClick={() => setHyreOpen((o) => !o)}
-                className="flex w-full items-center gap-2 rounded-full px-3 py-2 text-left text-[13px] font-semibold text-pastel-text hover:bg-white/80"
+                className={cn(
+                  "group flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-[12.5px] font-semibold transition-all duration-200",
+                  hyreActive
+                    ? "bg-white text-[#0f172a] shadow-sm dark:bg-[#1a1d27]"
+                    : "text-[#475569] hover:bg-white hover:text-[#0f172a] dark:hover:bg-[#1a1d27]",
+                )}
                 aria-expanded={hyreOpen}
               >
-                <PersonIcon className="size-4 shrink-0 text-accent" />
+                <NavIcon
+                  name="hire"
+                  className={cn(
+                    "size-4 shrink-0 transition-colors duration-200",
+                    hyreActive ? "text-[#6366f1]" : "text-[#94a3b8] group-hover:text-[#6366f1]",
+                  )}
+                />
                 <span className="flex-1 truncate">Intelli Hire</span>
                 <svg
-                  className={cn("size-3.5 text-pastel-muted transition", hyreOpen && "rotate-180")}
+                  className={cn(
+                    "size-3.5 text-[#94a3b8] transition-transform duration-200",
+                    hyreOpen && "rotate-180",
+                  )}
                   viewBox="0 0 16 16"
                   fill="none"
                   aria-hidden
@@ -215,14 +300,23 @@ export function AtnaSidebar() {
                         href={item.href}
                         title={item.label}
                         className={cn(
-                          "block rounded-full px-3 py-2 text-[12.5px] font-medium transition-colors",
+                          "group flex items-center gap-2 rounded-xl px-3 py-2 text-[12px] font-medium transition-all duration-200",
                           active
-                            ? "bg-[var(--sidebar-active)] text-white dark:bg-white dark:text-[#111827]"
-                            : "text-[var(--sidebar-fg)] hover:bg-white/90",
+                            ? "bg-[#0f172a] text-white shadow-sm dark:bg-white dark:text-[#0f172a]"
+                            : "text-[#64748b] hover:translate-x-0.5 hover:bg-white hover:text-[#0f172a] dark:hover:bg-[#1a1d27]",
                         )}
                         aria-current={active ? "page" : undefined}
                       >
-                        {item.label}
+                        <NavIcon
+                          name={item.icon}
+                          className={cn(
+                            "size-3.5 transition-colors duration-200",
+                            active
+                              ? "text-white dark:text-[#0f172a]"
+                              : "text-[#94a3b8] group-hover:text-[#00d8a6]",
+                          )}
+                        />
+                        <span className="truncate">{item.label}</span>
                       </Link>
                     </li>
                   );
@@ -231,29 +325,33 @@ export function AtnaSidebar() {
             )}
           </div>
 
-          <ul className="mt-2 space-y-0.5">
-            <li>
-              <NavLink href="/cases" label="Cases" pathname={pathname} collapsed={sidebarCollapsed} />
-            </li>
-            <li>
-              <NavLink href="/workflows" label="Workflows" pathname={pathname} collapsed={sidebarCollapsed} />
-            </li>
-            <li>
-              <NavLink href="/support" label="Support" pathname={pathname} collapsed={sidebarCollapsed} />
-            </li>
+          <ul className="mt-1.5 space-y-0.5">
+            {MAIN_LINKS.map((item) => (
+              <li key={item.href}>
+                <NavLink
+                  href={item.href}
+                  label={item.label}
+                  icon={item.icon}
+                  pathname={pathname}
+                  collapsed={sidebarCollapsed}
+                />
+              </li>
+            ))}
           </ul>
         </div>
       </nav>
 
       {!sidebarCollapsed && (
-        <div className="space-y-2 border-t border-[var(--sidebar-border)] p-3">
+        <div className="space-y-2 border-t border-[#e2e8f0] p-3 dark:border-[var(--sidebar-border)]">
           <div className="flex items-center justify-between px-1">
-            <span className="text-[10px] font-semibold uppercase tracking-wider text-pastel-muted">Accent</span>
+            <span className="text-[9px] font-semibold uppercase tracking-[0.14em] text-[#94a3b8]">
+              Accent
+            </span>
             <div className="flex gap-1.5">
               {(["teal", "indigo", "purple", "rose", "amber"] as const).map((color) => {
                 const bgClass = {
                   teal: "bg-[#0d9488]",
-                  indigo: "bg-[#1e75ff]",
+                  indigo: "bg-[#6366f1]",
                   purple: "bg-[#7c3aed]",
                   rose: "bg-[#e11d48]",
                   amber: "bg-[#d97706]",
@@ -264,9 +362,11 @@ export function AtnaSidebar() {
                     type="button"
                     onClick={() => setAccent(color)}
                     className={cn(
-                      "size-3.5 rounded-full border transition",
+                      "size-3.5 rounded-full border transition-all duration-200 hover:scale-125",
                       bgClass,
-                      accent === color ? "border-pastel-text scale-110" : "border-transparent opacity-70",
+                      accent === color
+                        ? "scale-110 border-[#0f172a] ring-2 ring-[#0f172a]/10"
+                        : "border-transparent opacity-70 hover:opacity-100",
                     )}
                     title={color}
                   />
@@ -277,22 +377,30 @@ export function AtnaSidebar() {
           <AnimatedButton
             type="button"
             onClick={() => setTheme(isDark ? "light" : "dark")}
-            className="flex w-full items-center justify-between rounded-full px-3 py-2 text-[12px] font-medium text-pastel-muted hover:bg-surface-muted"
+            className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-[11px] font-semibold text-[#64748b] transition-all duration-200 hover:bg-[#f1f5f9] hover:text-[#0f172a] dark:hover:bg-surface-muted"
             aria-label="Toggle theme"
           >
             <span>{isDark ? "Light mode" : "Dark mode"}</span>
+            <span className="text-[10px] text-[#94a3b8]">{isDark ? "☀" : "☾"}</span>
           </AnimatedButton>
         </div>
       )}
 
-      <div className="border-t border-[var(--sidebar-border)] p-2">
+      <div className="border-t border-[#e2e8f0] p-2 dark:border-[var(--sidebar-border)]">
         <AnimatedButton
           type="button"
           onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-          className="flex w-full items-center justify-center rounded-full px-3 py-2 text-[11px] font-medium text-pastel-muted hover:bg-surface-muted"
+          className="flex w-full items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-[11px] font-semibold text-[#64748b] transition-all duration-200 hover:bg-[#f1f5f9] hover:text-[#0f172a] dark:hover:bg-surface-muted"
           title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
-          {sidebarCollapsed ? "→" : "← Collapse"}
+          {sidebarCollapsed ? (
+            <span>→</span>
+          ) : (
+            <>
+              <span>←</span>
+              <span>Collapse</span>
+            </>
+          )}
         </AnimatedButton>
       </div>
     </aside>

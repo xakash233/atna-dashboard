@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full antialiased" suppressHydrationWarning>
-      <body className="h-full bg-pastel-bg text-pastel-text antialiased" suppressHydrationWarning>
+      <body className="h-full  text-pastel-text antialiased" suppressHydrationWarning>
         <ThemeProvider>
           <AccentProvider>
             <CustomCursor />
