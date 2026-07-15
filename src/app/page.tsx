@@ -1,7 +1,6 @@
-import { TrackerPage } from "@/components/tracker/TrackerPage";
-import { fetchTrackerDashboard } from "@/lib/api/tracker";
+import { LookupDashboard } from "@/components/dashboard/LookupDashboard";
 
 export default async function HomePage() {
-  const data = await fetchTrackerDashboard();
-  return <TrackerPage data={data} />;
+  return <LookupDashboard />;
 }
+

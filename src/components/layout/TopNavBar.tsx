@@ -1,3 +1,4 @@
+import AnimatedButton from "@/components/ui/AnimatedButton";
 import Image from "next/image";
 import Link from "next/link";
 import { APP, CURRENT_USER, TOP_NAV } from "@/lib/constants";
@@ -75,16 +76,16 @@ export function TopNavBar({ activeHref = "/" }: TopNavBarProps) {
           />
         </label>
 
-        <button
+        <AnimatedButton
           type="button"
           className="btn-premium rounded-xl bg-accent px-3 py-1.5 text-sm text-accent-fg shadow-[0_8px_24px_-8px_color-mix(in_srgb,var(--accent)_70%,transparent)] transition hover:brightness-110 hover:shadow-[0_12px_28px_-8px_color-mix(in_srgb,var(--accent)_80%,transparent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:px-4 sm:text-base"
         >
           Ask AI
-        </button>
+        </AnimatedButton>
 
         <ThemeToggle />
 
-        <button
+        <AnimatedButton
           type="button"
           className="relative rounded-xl p-2 text-fg-muted transition hover:bg-overlay hover:text-fg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           aria-label="Notifications"
@@ -98,9 +99,9 @@ export function TopNavBar({ activeHref = "/" }: TopNavBarProps) {
             unoptimized
           />
           <span className="absolute right-2 top-2 size-1.5 animate-pulse rounded-full bg-critical shadow-[0_0_8px_var(--critical)]" />
-        </button>
+        </AnimatedButton>
 
-        <button
+        <AnimatedButton
           type="button"
           className="rounded-xl p-2 text-fg-muted transition hover:bg-overlay hover:text-fg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           aria-label={`${CURRENT_USER.displayName} profile`}
@@ -113,7 +114,7 @@ export function TopNavBar({ activeHref = "/" }: TopNavBarProps) {
             className="size-5 opacity-80 dark:opacity-100"
             unoptimized
           />
-        </button>
+        </AnimatedButton>
       </div>
     </header>
   );

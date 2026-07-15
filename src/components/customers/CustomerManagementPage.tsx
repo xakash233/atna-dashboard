@@ -1,4 +1,5 @@
 "use client";
+import AnimatedButton from "@/components/ui/AnimatedButton";
 
 import { useState } from "react";
 import { motion } from "motion/react";
@@ -87,9 +88,9 @@ export function CustomerManagementPage({ data }: { data: CustomerMgmtData }) {
             </h1>
             <p className="mt-1 text-sm text-pastel-muted">Manage organization, user, roles</p>
           </div>
-          <button type="button" className="btn-premium px-4 py-2.5 text-xs font-semibold self-start sm:self-center">
+          <AnimatedButton type="button" className="btn-premium px-4 py-2.5 text-xs font-semibold self-start sm:self-center">
             Modify Settings
-          </button>
+          </AnimatedButton>
         </div>
       </FadeIn>
 
@@ -103,7 +104,7 @@ export function CustomerManagementPage({ data }: { data: CustomerMgmtData }) {
             {TABS.map((item) => {
               const active = tab === item.id;
               return (
-                <button
+                <AnimatedButton
                   key={item.id}
                   type="button"
                   role="tab"
@@ -122,7 +123,7 @@ export function CustomerManagementPage({ data }: { data: CustomerMgmtData }) {
                     />
                   )}
                   {item.label}
-                </button>
+                </AnimatedButton>
               );
             })}
           </div>
@@ -135,9 +136,9 @@ export function CustomerManagementPage({ data }: { data: CustomerMgmtData }) {
             <section className="pastel-card p-6">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-base font-semibold text-pastel-text">Branches</h2>
-                <button type="button" className="rounded-lg bg-accent-soft px-3 py-1.5 text-xs font-bold text-accent">
+                <AnimatedButton type="button" className="rounded-lg bg-accent-soft px-3 py-1.5 text-xs font-bold text-accent">
                   + Add Branch
-                </button>
+                </AnimatedButton>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm">
@@ -174,9 +175,9 @@ export function CustomerManagementPage({ data }: { data: CustomerMgmtData }) {
             <section className="pastel-card p-6">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-base font-semibold text-pastel-text">Organization Users</h2>
-                <button type="button" className="rounded-lg bg-accent-soft px-3 py-1.5 text-xs font-bold text-accent">
+                <AnimatedButton type="button" className="rounded-lg bg-accent-soft px-3 py-1.5 text-xs font-bold text-accent">
                   + Invite User
-                </button>
+                </AnimatedButton>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm">
@@ -216,9 +217,9 @@ export function CustomerManagementPage({ data }: { data: CustomerMgmtData }) {
             <section className="pastel-card p-6">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-base font-semibold text-pastel-text">Role Management</h2>
-                <button type="button" className="rounded-lg bg-accent-soft px-3 py-1.5 text-xs font-bold text-accent">
+                <AnimatedButton type="button" className="rounded-lg bg-accent-soft px-3 py-1.5 text-xs font-bold text-accent">
                   + New Role
-                </button>
+                </AnimatedButton>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm">

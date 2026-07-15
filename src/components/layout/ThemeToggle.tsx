@@ -1,4 +1,5 @@
 "use client";
+import AnimatedButton from "@/components/ui/AnimatedButton";
 
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
@@ -12,7 +13,7 @@ export function ThemeToggle() {
   const isDark = !mounted || theme === "dark";
 
   return (
-    <button
+    <AnimatedButton
       type="button"
       className="rounded-xl p-2 text-fg-muted transition hover:bg-overlay focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
@@ -38,6 +39,6 @@ export function ThemeToggle() {
           />
         </svg>
       )}
-    </button>
+    </AnimatedButton>
   );
 }

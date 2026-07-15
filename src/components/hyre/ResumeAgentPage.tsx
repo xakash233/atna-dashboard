@@ -1,4 +1,5 @@
 "use client";
+import AnimatedButton from "@/components/ui/AnimatedButton";
 
 import { useState } from "react";
 import { FadeIn, Stagger, StaggerItem } from "@/components/ui/Motion";
@@ -34,12 +35,12 @@ export function ResumeAgentPage({ data }: { data: ResumeAgentData }) {
               Intelli Hire · create jobs, upload résumés in bulk, and shortlist with AI
             </p>
           </div>
-          <button
+          <AnimatedButton
             type="button"
             className="inline-flex items-center justify-center rounded-xl bg-pastel-lavender-deep px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:brightness-110"
           >
             Create Job
-          </button>
+          </AnimatedButton>
         </div>
       </FadeIn>
 
@@ -77,7 +78,7 @@ export function ResumeAgentPage({ data }: { data: ResumeAgentData }) {
         <StaggerItem>
           <div className="flex flex-wrap gap-2">
             {TABS.map((item) => (
-              <button
+              <AnimatedButton
                 key={item.id}
                 type="button"
                 onClick={() => setTab(item.id)}
@@ -89,7 +90,7 @@ export function ResumeAgentPage({ data }: { data: ResumeAgentData }) {
                 )}
               >
                 {item.label}
-              </button>
+              </AnimatedButton>
             ))}
           </div>
         </StaggerItem>
@@ -118,13 +119,13 @@ export function ResumeAgentPage({ data }: { data: ResumeAgentData }) {
                 <p className="whitespace-pre-wrap text-sm leading-relaxed text-pastel-text/90">
                   {expanded ? job.description : `${preview}…`}
                 </p>
-                <button
+                <AnimatedButton
                   type="button"
                   onClick={() => setExpanded((e) => !e)}
                   className="mt-3 text-sm font-semibold text-pastel-lavender-deep hover:underline dark:text-pastel-lavender"
                 >
                   {expanded ? "Show less" : "Show full description"}
-                </button>
+                </AnimatedButton>
               </div>
             </article>
           ) : (

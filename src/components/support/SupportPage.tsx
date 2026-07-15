@@ -1,4 +1,5 @@
 "use client";
+import AnimatedButton from "@/components/ui/AnimatedButton";
 
 import { useState, type FormEvent } from "react";
 import { FadeIn, Stagger, StaggerItem } from "@/components/ui/Motion";
@@ -83,12 +84,12 @@ function RaisedTicketsPanel() {
           </label>
 
           <div className="flex flex-wrap items-center gap-3 pt-2">
-            <button
+            <AnimatedButton
               type="submit"
               className="rounded-xl bg-pastel-lavender-deep px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:brightness-110"
             >
               Submit
-            </button>
+            </AnimatedButton>
             {submitted && (
               <p className="text-sm text-pastel-muted">
                 Ticket form captured locally — API wiring pending.
@@ -138,7 +139,7 @@ export function SupportPage() {
             {TABS.map((item) => {
               const active = tab === item.id;
               return (
-                <button
+                <AnimatedButton
                   key={item.id}
                   type="button"
                   role="tab"
@@ -152,7 +153,7 @@ export function SupportPage() {
                   )}
                 >
                   {item.label}
-                </button>
+                </AnimatedButton>
               );
             })}
           </div>

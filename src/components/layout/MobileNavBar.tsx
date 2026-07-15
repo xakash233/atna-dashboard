@@ -1,4 +1,5 @@
 "use client";
+import AnimatedButton from "@/components/ui/AnimatedButton";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -109,7 +110,7 @@ export function MobileNavBar() {
           })}
 
           {/* Menu button */}
-          <button
+          <AnimatedButton
             type="button"
             onClick={() => setMenuOpen(!menuOpen)}
             className="flex flex-col items-center justify-center rounded-full p-2.5 text-pastel-muted transition hover:text-pastel-text"
@@ -136,7 +137,7 @@ export function MobileNavBar() {
               />
             </div>
             <span className="mt-0.5 text-[10px] font-medium">Menu</span>
-          </button>
+          </AnimatedButton>
         </nav>
       </div>
 
@@ -202,7 +203,7 @@ export function MobileNavBar() {
                       const isSelected = accent === color;
 
                       return (
-                        <button
+                        <AnimatedButton
                           key={color}
                           type="button"
                           onClick={() => setAccent(color)}
@@ -223,7 +224,7 @@ export function MobileNavBar() {
                   <span className="text-xs font-semibold uppercase tracking-wider text-pastel-muted">
                     Appearance
                   </span>
-                  <button
+                  <AnimatedButton
                     type="button"
                     onClick={() => setTheme(isDark ? "light" : "dark")}
                     className="flex items-center gap-2 rounded-xl bg-white/20 px-3 py-1.5 text-xs font-semibold text-pastel-text backdrop-blur-sm dark:bg-white/5 cursor-pointer"
@@ -239,7 +240,7 @@ export function MobileNavBar() {
                         <path d="M10 2v2M10 16v2M2 10h2M16 10h2" stroke="currentColor" strokeWidth="1.5" />
                       </svg>
                     )}
-                  </button>
+                  </AnimatedButton>
                 </div>
 
                 <Link

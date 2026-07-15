@@ -1,4 +1,5 @@
 "use client";
+import AnimatedButton from "@/components/ui/AnimatedButton";
 
 import {
   Bar,
@@ -61,12 +62,12 @@ export function FraudDetectorPage({ data }: { data: FraudDetectorData }) {
               Forensic resume screening · 6-stage validation
             </p>
           </div>
-          <button
+          <AnimatedButton
             type="button"
             className="inline-flex rounded-xl bg-pastel-lavender-deep px-4 py-2.5 text-sm font-semibold text-white shadow-sm"
           >
             Create Job
-          </button>
+          </AnimatedButton>
         </div>
       </FadeIn>
 

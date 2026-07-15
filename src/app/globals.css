@@ -1,45 +1,46 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
 @import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
 
-/* Boltshift-inspired — soft UI, royal blue, white cards */
+/* Atna Brand landing page theme alignment */
 :root {
-  --pastel-bg: #f4f4f7;
-  --pastel-canvas: #ececf1;
+  --pastel-bg: #f8fafc;
+  --pastel-canvas: #f1f5f9;
   --pastel-card: #ffffff;
-  --pastel-text: #111827;
-  --pastel-muted: #6b7280;
-  --pastel-lavender: #dbeafe;
-  --pastel-lavender-deep: #1e75ff;
+  --pastel-text: #0f172a;
+  --pastel-muted: #475569;
+  --pastel-lavender: #e2e8f0;
+  --pastel-lavender-deep: #4f46e5;
   --pastel-sidebar: #ffffff;
-  --pastel-sidebar-deep: #1e75ff;
-  --pastel-blue: #93c5fd;
-  --pastel-mint: #d1fae5;
+  --pastel-sidebar-deep: #4f46e5;
+  --pastel-blue: #38bdf8;
+  --pastel-mint: #00d8a6;
   --pastel-peach: #ffedd5;
   --pastel-rose: #fee2e2;
   --pastel-coral: #fecaca;
   --pastel-lilac: #e0e7ff;
   --pastel-cream: #fef3c7;
   --pastel-sky: #e0f2fe;
-  --pastel-shadow: 0 10px 24px -12px rgba(17, 24, 39, 0.12);
-  --pastel-shadow-soft: 0 2px 8px -2px rgba(17, 24, 39, 0.08);
+  --pastel-shadow: 0 4px 12px -4px rgba(15, 23, 42, 0.04);
+  --pastel-shadow-soft: 0 1px 3px -1px rgba(15, 23, 42, 0.02);
 
   --sidebar-bg: #ffffff;
-  --sidebar-fg: #374151;
-  --sidebar-muted: #9ca3af;
-  --sidebar-border: #e5e7eb;
-  --sidebar-hover: #f4f4f7;
-  --sidebar-active: #111827;
-  --sidebar-accent: #1e75ff;
+  --sidebar-fg: #0f172a;
+  --sidebar-muted: #475569;
+  --sidebar-border: #e2e8f0;
+  --sidebar-hover: #f8fafc;
+  --sidebar-active: #0f172a;
+  --sidebar-accent: #4f46e5;
   --sidebar-width: 220px;
 
-  --bg: #f4f4f7;
+  --bg: #f8fafc;
   --bg-nav: #ffffff;
   --surface: #ffffff;
   --surface-solid: #ffffff;
-  --surface-muted: #f4f4f7;
-  --surface-elevated: #f9fafb;
-  --surface-hover: #ececf1;
-  --border: #e5e7eb;
+  --surface-muted: #f8fafc;
+  --surface-elevated: #ffffff;
+  --surface-hover: #f1f5f9;
+  --border: #e2e8f0;
   --border-subtle: #f3f4f6;
   --border-strong: #d1d5db;
   --text: #111827;
@@ -238,17 +239,21 @@ body {
 }
 
 body {
-  background-color: var(--pastel-bg);
+  background: linear-gradient(135deg, #f8fafc 0%, #f0fdfa 50%, #f5f3ff 100%) !important;
+  background-attachment: fixed !important;
   color: var(--pastel-text);
-  font-family: var(--font-sans);
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif !important;
   -webkit-font-smoothing: antialiased;
 }
 
 h1,
 h2,
-h3 {
-  font-family: var(--font-display);
-  letter-spacing: -0.025em;
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  letter-spacing: 0.01em;
 }
 
 * {
@@ -384,4 +389,69 @@ h3 {
 
 .animate-fadeIn {
   animation: fadeIn 0.25s ease;
+}
+
+/* Custom Leaflet Map styling overrides */
+.leaflet-container {
+  background: transparent !important;
+  font-family: inherit !important;
+}
+.leaflet-popup-content-wrapper {
+  background: #ffffff !important;
+  border-radius: 12px !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+}
+.leaflet-popup-tip {
+  background: #ffffff !important;
+}
+.leaflet-bar {
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: none !important;
+  border-radius: 8px !important;
+  overflow: hidden;
+}
+.leaflet-bar a {
+  background: #ffffff !important;
+  color: #334155 !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  transition: background 0.2s;
+}
+.leaflet-bar a:hover {
+  background: #f8fafc !important;
+}
+.leaflet-control-layers {
+  border-radius: 10px !important;
+  border: 1px solid #e2e8f0 !important;
+  background: #ffffff !important;
+  color: #334155 !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04) !important;
+}
+.leaflet-control-layers-toggle {
+  border-radius: 10px !important;
+}
+/* Custom High-Contrast Minimalist Tooltip Styling Overrides */
+.leaflet-tooltip {
+  background: #0f172a !important;
+  border: none !important;
+  border-radius: 6px !important;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15) !important;
+  color: #ffffff !important;
+  padding: 5px 10px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  font-family: inherit !important;
+  white-space: nowrap !important;
+}
+.leaflet-tooltip-top:before {
+  border-top-color: #0f172a !important;
+}
+
+/* Custom Smooth Cursor active only on map container */
+body.custom-cursor-map-hover,
+body.custom-cursor-map-hover #interactive-map-container,
+body.custom-cursor-map-hover #interactive-map-container * {
+  cursor: none !important;
 }

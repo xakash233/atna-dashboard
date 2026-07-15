@@ -1,4 +1,5 @@
 "use client";
+import AnimatedButton from "@/components/ui/AnimatedButton";
 
 import { useState, useRef, useEffect } from "react";
 import { cn } from "@/lib/cn";
@@ -35,7 +36,7 @@ export function BGMPlayer() {
 
   return (
     <div className="fixed right-4 top-4 z-50 md:right-8">
-      <button
+      <AnimatedButton
         type="button"
         onClick={togglePlayback}
         className="flex items-center gap-2 rounded-full border border-white/10 bg-black/60 px-3 py-1.5 text-xs font-medium text-white shadow-[0_0_20px_rgba(0,0,0,0.5)] backdrop-blur-md transition hover:bg-black/80 hover:border-accent/40 cursor-pointer"
@@ -68,7 +69,7 @@ export function BGMPlayer() {
         <span className="text-[10px] tracking-wider uppercase font-semibold text-pastel-muted">
           {isPlaying ? "BGM On" : "Tech BGM"}
         </span>
-      </button>
+      </AnimatedButton>
     </div>
   );
 }

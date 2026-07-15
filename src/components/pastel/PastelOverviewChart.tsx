@@ -1,4 +1,5 @@
 "use client";
+import AnimatedButton from "@/components/ui/AnimatedButton";
 
 import { useState } from "react";
 import {
@@ -46,7 +47,7 @@ export function PastelOverviewChart() {
           </h2>
           <div className="mt-3 flex flex-wrap gap-1 rounded-full bg-[#f3eef9] p-1 dark:bg-white/5">
             {TABS.map((t) => (
-              <button
+              <AnimatedButton
                 key={t}
                 type="button"
                 onClick={() => setTab(t)}
@@ -58,16 +59,16 @@ export function PastelOverviewChart() {
                 )}
               >
                 {t}
-              </button>
+              </AnimatedButton>
             ))}
           </div>
         </div>
-        <button
+        <AnimatedButton
           type="button"
           className="shrink-0 rounded-full bg-[#d4c4f0] px-4 py-2 text-xs font-semibold text-[#6b4fa8] shadow-sm transition hover:brightness-105"
         >
           Last Month Summary
-        </button>
+        </AnimatedButton>
       </div>
 
       <div className="mt-5 flex flex-wrap gap-8">

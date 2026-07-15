@@ -1,4 +1,5 @@
 "use client";
+import AnimatedButton from "@/components/ui/AnimatedButton";
 
 import { FadeIn, Stagger, StaggerItem } from "@/components/ui/Motion";
 import type { DeepfakeData } from "@/lib/api/fraud";
@@ -21,24 +22,24 @@ export function DeepfakePage({ data }: { data: DeepfakeData }) {
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
-            <button
+            <AnimatedButton
               type="button"
               className="rounded-xl bg-pastel-lavender-deep px-4 py-2.5 text-sm font-semibold text-white"
             >
               Analyze Video
-            </button>
-            <button
+            </AnimatedButton>
+            <AnimatedButton
               type="button"
               className="rounded-xl border border-[rgba(180,168,204,0.45)] bg-pastel-card px-4 py-2.5 text-sm font-semibold text-pastel-text"
             >
               Recorded Video
-            </button>
-            <button
+            </AnimatedButton>
+            <AnimatedButton
               type="button"
               className="rounded-xl border border-[rgba(180,168,204,0.45)] bg-pastel-card px-4 py-2.5 text-sm font-semibold text-pastel-text"
             >
               Live Interview
-            </button>
+            </AnimatedButton>
           </div>
         </div>
       </FadeIn>

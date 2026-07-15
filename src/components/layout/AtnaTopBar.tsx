@@ -1,4 +1,5 @@
 "use client";
+import AnimatedButton from "@/components/ui/AnimatedButton";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -22,14 +23,14 @@ export function AtnaTopBar() {
       </Link>
 
       <div className="flex items-center gap-2 sm:gap-3">
-        <button
+        <AnimatedButton
           type="button"
           className="grid size-10 place-items-center rounded-full text-pastel-muted transition hover:bg-surface-muted hover:text-pastel-text"
           aria-label="Notifications"
         >
           <Image src="/assets/icon-bell.svg" alt="" width={16} height={20} className="opacity-70" unoptimized />
-        </button>
-        <button
+        </AnimatedButton>
+        <AnimatedButton
           type="button"
           onClick={() => setTheme(isDark ? "light" : "dark")}
           className="grid size-10 place-items-center rounded-full text-pastel-muted transition hover:bg-surface-muted hover:text-pastel-text"
@@ -45,7 +46,7 @@ export function AtnaTopBar() {
               </>
             )}
           </svg>
-        </button>
+        </AnimatedButton>
 
         <div className="ml-1 flex items-center gap-2.5 rounded-full border border-border bg-surface-muted/60 py-1 pl-1 pr-3">
           <span className="grid size-9 place-items-center rounded-full bg-accent text-xs font-bold text-white">

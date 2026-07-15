@@ -1,4 +1,5 @@
 "use client";
+import AnimatedButton from "@/components/ui/AnimatedButton";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -125,7 +126,7 @@ export function AtnaSidebar() {
 
   return (
     <aside
-      className="fixed inset-y-0 left-0 z-40 hidden w-[var(--sidebar-width)] flex-col border-r border-[var(--sidebar-border)] bg-[var(--sidebar-bg)] md:flex"
+      className="fixed inset-y-0 left-0 z-40 hidden w-[var(--sidebar-width)] flex-col border-r border-[var(--sidebar-border)] bg-white/70 backdrop-blur-md md:flex"
     >
       <div
         className={cn(
@@ -185,7 +186,7 @@ export function AtnaSidebar() {
                 <PersonIcon className="size-4" />
               </Link>
             ) : (
-              <button
+              <AnimatedButton
                 type="button"
                 onClick={() => setHyreOpen((o) => !o)}
                 className="flex w-full items-center gap-2 rounded-full px-3 py-2 text-left text-[13px] font-semibold text-pastel-text hover:bg-white/80"
@@ -201,7 +202,7 @@ export function AtnaSidebar() {
                 >
                   <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
                 </svg>
-              </button>
+              </AnimatedButton>
             )}
 
             {hyreOpen && !sidebarCollapsed && (
@@ -258,7 +259,7 @@ export function AtnaSidebar() {
                   amber: "bg-[#d97706]",
                 }[color];
                 return (
-                  <button
+                  <AnimatedButton
                     key={color}
                     type="button"
                     onClick={() => setAccent(color)}
@@ -273,26 +274,26 @@ export function AtnaSidebar() {
               })}
             </div>
           </div>
-          <button
+          <AnimatedButton
             type="button"
             onClick={() => setTheme(isDark ? "light" : "dark")}
             className="flex w-full items-center justify-between rounded-full px-3 py-2 text-[12px] font-medium text-pastel-muted hover:bg-surface-muted"
             aria-label="Toggle theme"
           >
             <span>{isDark ? "Light mode" : "Dark mode"}</span>
-          </button>
+          </AnimatedButton>
         </div>
       )}
 
       <div className="border-t border-[var(--sidebar-border)] p-2">
-        <button
+        <AnimatedButton
           type="button"
           onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
           className="flex w-full items-center justify-center rounded-full px-3 py-2 text-[11px] font-medium text-pastel-muted hover:bg-surface-muted"
           title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           {sidebarCollapsed ? "→" : "← Collapse"}
-        </button>
+        </AnimatedButton>
       </div>
     </aside>
   );

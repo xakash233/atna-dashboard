@@ -1,4 +1,5 @@
 "use client";
+import AnimatedButton from "@/components/ui/AnimatedButton";
 
 import { useState } from "react";
 import { cn } from "@/lib/cn";
@@ -22,7 +23,7 @@ export function CaseFilters({ onFilterChange }: CaseFiltersProps) {
         {FILTERS.map((filter) => {
           const selected = filter === active;
           return (
-            <button
+            <AnimatedButton
               key={filter}
               type="button"
               role="tab"
@@ -39,12 +40,12 @@ export function CaseFilters({ onFilterChange }: CaseFiltersProps) {
               }}
             >
               {filter}
-            </button>
+            </AnimatedButton>
           );
         })}
       </div>
 
-      <button
+      <AnimatedButton
         type="button"
         className="btn-premium inline-flex items-center gap-2 self-start rounded-xl border border-border-strong bg-surface-solid px-[17px] py-[9px] text-base text-fg shadow-sm transition hover:border-accent/35 hover:shadow-[0_8px_24px_-12px_var(--glow-accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:self-end"
       >
@@ -52,7 +53,7 @@ export function CaseFilters({ onFilterChange }: CaseFiltersProps) {
           <path d="M1 1.5h12M3 4.5h8M5 7.5h4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
         </svg>
         Advanced Filters
-      </button>
+      </AnimatedButton>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 "use client";
+import AnimatedButton from "@/components/ui/AnimatedButton";
 
 import { useState } from "react";
 import { FadeIn, Stagger, StaggerItem } from "@/components/ui/Motion";
@@ -80,7 +81,7 @@ export function TruDocPage({ data }: { data: TruDocData }) {
                   ["bulk", "Bulk Upload"],
                 ] as const
               ).map(([id, label]) => (
-                <button
+                <AnimatedButton
                   key={id}
                   type="button"
                   onClick={() => setMode(id)}
@@ -92,7 +93,7 @@ export function TruDocPage({ data }: { data: TruDocData }) {
                   )}
                 >
                   {label}
-                </button>
+                </AnimatedButton>
               ))}
             </div>
             <input

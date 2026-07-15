@@ -1,4 +1,5 @@
 "use client";
+import AnimatedButton from "@/components/ui/AnimatedButton";
 
 import { FadeIn, Stagger, StaggerItem } from "@/components/ui/Motion";
 import type { CustomerDashboardData } from "@/lib/types";
@@ -25,18 +26,18 @@ export function CustomerDashboard({ data }: CustomerDashboardProps) {
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3 sm:gap-4">
-            <button
+            <AnimatedButton
               type="button"
               className="rounded-xl border border-neutral-300/80 bg-slate-50/50 px-6 py-2 text-xs font-semibold tracking-wide text-[#6366f1] backdrop-blur-[2px] transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6366f1] dark:border-border dark:bg-surface-elevated dark:text-accent"
             >
               Export Data
-            </button>
-            <button
+            </AnimatedButton>
+            <AnimatedButton
               type="button"
               className="btn-premium rounded-xl bg-[#6366f1] px-6 py-2.5 text-xs font-semibold tracking-wide text-white shadow-[0_10px_15px_-3px_rgba(109,93,246,0.30),0_4px_6px_-4px_rgba(109,93,246,0.30)] transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6366f1] dark:bg-accent dark:text-accent-fg"
             >
               + New Customer
-            </button>
+            </AnimatedButton>
           </div>
         </div>
       </FadeIn>

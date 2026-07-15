@@ -1,4 +1,5 @@
 "use client";
+import AnimatedButton from "@/components/ui/AnimatedButton";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -115,12 +116,12 @@ export function SideNavBar() {
           Support
         </Link>
 
-        <button
+        <AnimatedButton
           type="button"
           className="btn-premium mb-3 w-full rounded-sm bg-[#6366f1] px-4 py-3 text-xs font-semibold tracking-wide text-white shadow-[0_10px_15px_-3px_rgba(109,93,246,0.25)] transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6366f1] dark:bg-accent dark:text-accent-fg"
         >
           Upgrade Node
-        </button>
+        </AnimatedButton>
 
         <div className="flex items-center gap-3 rounded-xl px-4 py-3 transition hover:bg-overlay">
           <div className="flex size-8 items-center justify-center rounded-full border border-border-strong bg-surface-elevated">

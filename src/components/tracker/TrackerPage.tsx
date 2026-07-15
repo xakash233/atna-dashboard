@@ -1,4 +1,5 @@
 "use client";
+import AnimatedButton from "@/components/ui/AnimatedButton";
 
 import { useState } from "react";
 import { motion } from "motion/react";
@@ -538,9 +539,9 @@ function SubOrgsPanel() {
           <h2 className="text-base font-semibold text-pastel-text">Sub-Organizations</h2>
           <p className="text-xs text-pastel-muted">Manage child branches and operational nodes.</p>
         </div>
-        <button type="button" className="btn-premium px-4 py-2 text-xs font-semibold cursor-pointer self-start sm:self-auto">
+        <AnimatedButton type="button" className="btn-premium px-4 py-2 text-xs font-semibold cursor-pointer self-start sm:self-auto">
           + Create Sub-Org
-        </button>
+        </AnimatedButton>
       </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {data.map((org) => (
@@ -590,9 +591,9 @@ function UsersPanel({ totalUsers }: { totalUsers: number }) {
           <h2 className="text-base font-semibold text-pastel-text">User Directory ({totalUsers})</h2>
           <p className="text-xs text-pastel-muted">Manage system users, roles, and access credentials.</p>
         </div>
-        <button type="button" className="btn-premium px-4 py-2 text-xs font-semibold cursor-pointer self-start sm:self-auto">
+        <AnimatedButton type="button" className="btn-premium px-4 py-2 text-xs font-semibold cursor-pointer self-start sm:self-auto">
           + Invite User
-        </button>
+        </AnimatedButton>
       </div>
       <div className="overflow-x-auto rounded-2xl border border-border/15">
         <table className="w-full text-left text-sm">
@@ -713,7 +714,7 @@ export function TrackerPage({ data }: { data: TrackerDashboardData }) {
             </div>
 
             {/* Notification Bell */}
-            <button
+            <AnimatedButton
               type="button"
               className="relative grid size-9 shrink-0 place-items-center rounded-xl bg-pastel-card border border-border text-pastel-muted hover:text-pastel-text transition cursor-pointer"
               title="Recent Notifications"
@@ -723,9 +724,9 @@ export function TrackerPage({ data }: { data: TrackerDashboardData }) {
                 <path d="M13.73 21a2 2 0 0 1-3.46 0" />
               </svg>
               <span className="absolute top-1.5 right-1.5 size-2 rounded-full bg-rose-500 ring-1 ring-white dark:ring-black animate-pulse" />
-            </button>
+            </AnimatedButton>
 
-            <button
+            <AnimatedButton
               type="button"
               onClick={onRefresh}
               disabled={refreshing}
@@ -751,7 +752,7 @@ export function TrackerPage({ data }: { data: TrackerDashboardData }) {
                 />
               </svg>
               <span className="hidden sm:inline">Refresh</span>
-            </button>
+            </AnimatedButton>
           </div>
         </header>
       </FadeIn>
@@ -772,12 +773,12 @@ export function TrackerPage({ data }: { data: TrackerDashboardData }) {
                 </select>
                 <span className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-pastel-muted text-[10px]">▼</span>
               </div>
-              <button type="button" className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-border bg-pastel-card px-3.5 py-1.5 text-xs font-semibold text-pastel-text transition hover:bg-surface-muted cursor-pointer">
+              <AnimatedButton type="button" className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-border bg-pastel-card px-3.5 py-1.5 text-xs font-semibold text-pastel-text transition hover:bg-surface-muted cursor-pointer">
                 <span>Export</span>
-              </button>
-              <button type="button" className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-accent px-3.5 py-1.5 text-xs font-semibold text-white transition hover:opacity-90 cursor-pointer">
+              </AnimatedButton>
+              <AnimatedButton type="button" className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-accent px-3.5 py-1.5 text-xs font-semibold text-white transition hover:opacity-90 cursor-pointer">
                 <span>Filter</span>
-              </button>
+              </AnimatedButton>
             </div>
           </div>
         </StaggerItem>
@@ -798,7 +799,7 @@ export function TrackerPage({ data }: { data: TrackerDashboardData }) {
               className="flex gap-1 overflow-x-auto border-b border-border px-3"
             >
               {TABS.map((item) => (
-                <button
+                <AnimatedButton
                   key={item.id}
                   type="button"
                   role="tab"
@@ -817,7 +818,7 @@ export function TrackerPage({ data }: { data: TrackerDashboardData }) {
                       transition={{ type: "spring", stiffness: 350, damping: 30 }}
                     />
                   )}
-                </button>
+                </AnimatedButton>
               ))}
             </div>
             <div className="p-5 sm:p-6" role="tabpanel">

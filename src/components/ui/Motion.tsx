@@ -6,7 +6,7 @@ import { useEffect, useState, type ReactNode } from "react";
 const ease = [0.22, 1, 0.36, 1] as const;
 
 /** Animate only after mount, and never when the user prefers reduced motion. */
-function useReadyToAnimate() {
+export function useReadyToAnimate() {
   const [animate, setAnimate] = useState(false);
 
   useEffect(() => {

@@ -1,4 +1,5 @@
 "use client";
+import AnimatedButton from "@/components/ui/AnimatedButton";
 
 import Link from "next/link";
 import type { CustomerActivity, MetricTone } from "@/lib/types";
@@ -88,7 +89,7 @@ export function CustomerActivityTable({ customers }: CustomerActivityTableProps)
                   </div>
                 </td>
                 <td className="px-4 py-4">
-                  <button
+                  <AnimatedButton
                     type="button"
                     className="rounded-lg p-2 text-fg-muted transition hover:bg-overlay hover:text-fg"
                     aria-label={`Actions for ${row.name}`}
@@ -98,7 +99,7 @@ export function CustomerActivityTable({ customers }: CustomerActivityTableProps)
                       <circle cx="8" cy="8" r="1.3" />
                       <circle cx="8" cy="13" r="1.3" />
                     </svg>
-                  </button>
+                  </AnimatedButton>
                 </td>
               </tr>
             ))}

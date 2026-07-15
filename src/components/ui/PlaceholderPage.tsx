@@ -1,4 +1,5 @@
 "use client";
+import AnimatedButton from "@/components/ui/AnimatedButton";
 
 import { motion } from "motion/react";
 
@@ -34,12 +35,12 @@ export function PlaceholderPage({ title, description }: PlaceholderProps) {
       <p className="mt-3 text-sm leading-relaxed text-pastel-muted mx-auto max-w-md">{description}</p>
       
       <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-        <button type="button" className="btn-premium px-6 py-2.5 text-xs font-semibold">
+        <AnimatedButton type="button" className="btn-premium px-6 py-2.5 text-xs font-semibold">
           Configure API Settings
-        </button>
-        <button type="button" className="rounded-xl border border-border bg-white/20 px-6 py-2.5 text-xs font-semibold text-pastel-text backdrop-blur-sm transition hover:bg-surface-muted dark:bg-white/5 dark:hover:bg-white/10">
+        </AnimatedButton>
+        <AnimatedButton type="button" className="rounded-xl border border-border bg-white/20 px-6 py-2.5 text-xs font-semibold text-pastel-text backdrop-blur-sm transition hover:bg-surface-muted dark:bg-white/5 dark:hover:bg-white/10">
           Read Integration Docs
-        </button>
+        </AnimatedButton>
       </div>
 
       <p className="mt-6 text-xs text-pastel-muted flex items-center justify-center gap-1.5">

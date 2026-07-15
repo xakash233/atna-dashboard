@@ -4,7 +4,7 @@ import { MobileNavBar } from "@/components/layout/MobileNavBar";
 
 export function PastelShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative min-h-full bg-pastel-bg">
+    <div className="relative min-h-full bg-transparent">
       <AtnaSidebar />
       <div className="flex min-h-full flex-col md:pl-[var(--sidebar-width)]">
         <AtnaTopBar />

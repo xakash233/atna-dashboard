@@ -1,4 +1,5 @@
 "use client";
+import AnimatedButton from "@/components/ui/AnimatedButton";
 
 import { useState } from "react";
 import { cn } from "@/lib/cn";
@@ -51,13 +52,13 @@ export function PastelOrderTable() {
           Order Status — Overview of latest month
         </h2>
         <div className="flex flex-wrap items-center gap-2">
-          <button
+          <AnimatedButton
             type="button"
             className="rounded-xl bg-[#f0b6c8] px-3 py-2 text-xs font-semibold text-[#a85f76] shadow-sm transition hover:brightness-105"
           >
             Add
-          </button>
-          <button
+          </AnimatedButton>
+          <AnimatedButton
             type="button"
             className="grid size-9 place-items-center rounded-xl bg-[#f3eef9] text-pastel-muted transition hover:text-pastel-text"
             aria-label="Delete"
@@ -65,8 +66,8 @@ export function PastelOrderTable() {
             <svg className="size-4" viewBox="0 0 16 16" fill="none" aria-hidden>
               <path d="M3 4.5h10M6 4.5V3.5h4v1M5.5 4.5l.5 8h4l.5-8" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
             </svg>
-          </button>
-          <button
+          </AnimatedButton>
+          <AnimatedButton
             type="button"
             className="grid size-9 place-items-center rounded-xl bg-[#f3eef9] text-pastel-muted transition hover:text-pastel-text"
             aria-label="Info"
@@ -75,7 +76,7 @@ export function PastelOrderTable() {
               <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="1.3" />
               <path d="M8 7v4M8 5.2v.6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
             </svg>
-          </button>
+          </AnimatedButton>
           <label className="relative ml-1 min-w-[160px] flex-1 sm:flex-none">
             <span className="sr-only">Search orders</span>
             <input
@@ -129,7 +130,7 @@ export function PastelOrderTable() {
 
       <div className="mt-auto flex items-center justify-end gap-1.5 border-t border-[rgba(180,168,204,0.25)] px-5 py-4">
         {[1, 2, 3, 4, 5, 6].map((n) => (
-          <button
+          <AnimatedButton
             key={n}
             type="button"
             onClick={() => setPage(n)}
@@ -141,7 +142,7 @@ export function PastelOrderTable() {
             )}
           >
             {n}
-          </button>
+          </AnimatedButton>
         ))}
       </div>
     </section>
