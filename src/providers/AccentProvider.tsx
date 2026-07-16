@@ -7,15 +7,12 @@ export type AccentColor = "teal" | "indigo" | "purple" | "rose" | "amber";
 type AccentContextType = {
   accent: AccentColor;
   setAccent: (accent: AccentColor) => void;
-  sidebarCollapsed: boolean;
-  setSidebarCollapsed: (val: boolean) => void;
 };
 
 const AccentContext = createContext<AccentContextType | undefined>(undefined);
 
 export function AccentProvider({ children }: { children: ReactNode }) {
   const [accent, setAccentState] = useState<AccentColor>("indigo");
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   // Load from localStorage on mount
   useEffect(() => {
@@ -37,22 +34,12 @@ export function AccentProvider({ children }: { children: ReactNode }) {
     localStorage.setItem("atna-accent-color", accent);
   }, [accent]);
 
-  // Update HTML class on sidebar collapse changes
-  useEffect(() => {
-    const root = document.documentElement;
-    if (sidebarCollapsed) {
-      root.classList.add("sidebar-collapsed");
-    } else {
-      root.classList.remove("sidebar-collapsed");
-    }
-  }, [sidebarCollapsed]);
-
   const setAccent = (newAccent: AccentColor) => {
     setAccentState(newAccent);
   };
 
   return (
-    <AccentContext.Provider value={{ accent, setAccent, sidebarCollapsed, setSidebarCollapsed }}>
+    <AccentContext.Provider value={{ accent, setAccent }}>
       {children}
     </AccentContext.Provider>
   );

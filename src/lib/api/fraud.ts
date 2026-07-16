@@ -63,6 +63,8 @@ export async function fetchFraudDetector(): Promise<FraudDetectorData> {
     fraudSignals: [
       { label: "Email reputation flag", value: 1 },
       { label: "Phone reputation flag", value: 1 },
+      { label: "IP anomaly flag", value: 1 },
+      { label: "Document mismatch flag", value: 1 },
     ],
     fakeMediaBins: [
       { label: "0-10%", value: 0 },
@@ -151,7 +153,7 @@ export async function fetchTruDoc(): Promise<TruDocData> {
       totalChecked: { value: 1, delta: "+0%" },
       passRate: { value: "0%", delta: "+0%" },
       flagged: { value: 1, delta: "+0%" },
-      avgTime: "—",
+      avgTime: "0",
     },
     documents: [
       {

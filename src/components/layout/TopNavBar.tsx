@@ -16,19 +16,16 @@ export function TopNavBar({ activeHref = "/" }: TopNavBarProps) {
       data-node-id="3:679"
     >
       <div className="flex h-full items-center gap-4 lg:gap-8">
-        <Link href="/" className="group flex shrink-0 items-center gap-2">
-          <span className="relative grid place-items-center">
-            <span className="absolute inset-0 rounded-full bg-accent/20 opacity-0 blur-md transition group-hover:opacity-100" />
-            <Image
-              src="/assets/logo-hex.svg"
-              alt=""
-              width={21}
-              height={18}
-              className="relative h-[18px] w-[21px] transition duration-300 group-hover:scale-110 dark:invert-0 invert-[0.35] hue-rotate-[220deg] saturate-150 brightness-75"
-              unoptimized
-            />
-          </span>
-          <span className="text-lg font-bold tracking-[-0.6px] text-brand transition group-hover:text-accent sm:text-2xl">
+        <Link href="/" className="group flex shrink-0 items-center gap-2.5">
+          <Image
+            src="/assets/logo-atna.svg"
+            alt=""
+            width={28}
+            height={28}
+            className="relative size-7 transition duration-300 group-hover:scale-105"
+            unoptimized
+          />
+          <span className="text-lg font-bold tracking-tight text-[#0f172a] transition group-hover:text-[#1E90FF] sm:text-xl dark:text-fg">
             {APP.name}
           </span>
         </Link>

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { FadeIn, Stagger, StaggerItem } from "@/components/ui/Motion";
 import type { CustomerMgmtData, CustomerMgmtOrg, CustomerMgmtTab } from "@/lib/api/customerManagement";
 import { cn } from "@/lib/cn";
+import { cardShell, glassHover, glassHoverSoft } from "@/lib/ui";
 
 const TABS: { id: CustomerMgmtTab; label: string }[] = [
   { id: "overview", label: "Organization overview" },
@@ -33,14 +34,8 @@ const MOCK_ROLES = [
   { name: "Viewer", users: 4, permissions: "Read-only access" },
 ];
 
-const cardShell =
-  "rounded-2xl border border-[#e2e8f0] bg-white shadow-[0_1px_3px_rgba(0,0,0,0.01),0_8px_16px_rgba(0,0,0,0.01)] transition-all duration-300";
-
-/** Dodger blue hover on grey surfaces */
-const indigoHover =
-  "hover:border-[#1E90FF]/40 hover:bg-[#E8F4FF] hover:shadow-[0_8px_20px_-10px_rgba(30,144,255,0.35)]";
-const indigoHoverShadowSoft =
-  "hover:border-[#1E90FF]/40 hover:shadow-[0_12px_24px_rgba(30,144,255,0.16)]";
+const indigoHover = glassHover;
+const indigoHoverShadowSoft = glassHoverSoft;
 const indigoBar = "bg-[#1E90FF]";
 const indigoLabelHover = "group-hover:text-[#1E90FF]";
 const indigoActiveBorder = "border-[#1E90FF]/40 bg-white";
@@ -109,14 +104,36 @@ function SummaryCards() {
 function OrganizationOverview({ org }: { org: CustomerMgmtOrg }) {
   const [hovered, setHovered] = useState<string | null>(null);
 
-  const fields = [
+  const primaryFields = [
     { key: "name", label: "Organization name", value: org.name },
     { key: "code", label: "Organization code", value: org.code },
     { key: "level", label: "Organization level", value: org.level },
     { key: "parent", label: "Parent organization", value: org.parentOrganization },
-    { key: "address", label: "Address", value: org.address, wide: true },
-    { key: "date", label: "Created date", value: org.createdDate, wide: true },
   ];
+
+  const fieldCard = (field: { key: string; label: string; value: string }, className?: string) => (
+    <div
+      key={field.key}
+      onMouseEnter={() => setHovered(field.key)}
+      onMouseLeave={() => setHovered(null)}
+      className={cn(
+        "group cursor-default rounded-xl border border-[#e2e8f0] bg-[#f8fafc] px-3.5 py-3 transition-all duration-300 hover:-translate-y-0.5",
+        indigoHover,
+        hovered === field.key && indigoActiveBorder,
+        className,
+      )}
+    >
+      <p
+        className={cn(
+          "text-[9px] font-semibold uppercase tracking-wide text-[#94a3b8] transition-colors",
+          indigoLabelHover,
+        )}
+      >
+        {field.label}
+      </p>
+      <p className="mt-1.5 text-[12px] font-semibold text-[#0f172a]">{field.value}</p>
+    </div>
+  );
 
   return (
     <div className="flex h-full min-h-0 flex-1 flex-col gap-3">
@@ -132,45 +149,43 @@ function OrganizationOverview({ org }: { org: CustomerMgmtOrg }) {
           </div>
         </div>
 
-        <div className="grid min-h-0 flex-1 grid-cols-1 content-start gap-2.5 sm:grid-cols-2">
-          {fields.map((field) => (
-            <div
-              key={field.key}
-              onMouseEnter={() => setHovered(field.key)}
-              onMouseLeave={() => setHovered(null)}
-              className={cn(
-                "group cursor-default rounded-xl border border-[#e2e8f0] bg-[#f8fafc] px-3.5 py-3 transition-all duration-300 hover:-translate-y-0.5",
-                indigoHover,
-                field.wide && "sm:col-span-2",
-                hovered === field.key && indigoActiveBorder,
-              )}
-            >
-              <p className={cn("text-[9px] font-semibold uppercase tracking-wide text-[#94a3b8] transition-colors", indigoLabelHover)}>
-                {field.label}
-              </p>
-              <p className="mt-1.5 text-[12px] font-semibold text-[#0f172a]">{field.value}</p>
-            </div>
-          ))}
+        <div className="flex min-h-0 flex-1 flex-col gap-2.5">
+          <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 xl:grid-cols-4">
+            {primaryFields.map((field) => fieldCard(field))}
+          </div>
+
+          <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 xl:grid-cols-4">
+            {fieldCard(
+              { key: "address", label: "Address", value: org.address },
+              "sm:col-span-2 xl:col-span-3",
+            )}
+            {fieldCard({ key: "date", label: "Created date", value: org.createdDate })}
+          </div>
 
           <div
             onMouseEnter={() => setHovered("creator")}
             onMouseLeave={() => setHovered(null)}
             className={cn(
-              "group cursor-default rounded-xl border border-[#e2e8f0] bg-[#f8fafc] px-3.5 py-3 transition-all duration-300 hover:-translate-y-0.5 sm:col-span-2",
+              "group mt-auto ml-auto w-full max-w-sm cursor-default rounded-xl border border-[#e2e8f0] bg-[#f8fafc] px-3 py-2 transition-all duration-300 hover:-translate-y-0.5",
               indigoHover,
               hovered === "creator" && indigoActiveBorder,
             )}
           >
-            <p className={cn("text-[9px] font-semibold uppercase tracking-wide text-[#94a3b8] transition-colors", indigoLabelHover)}>
+            <p
+              className={cn(
+                "text-[8px] font-semibold uppercase tracking-wide text-[#94a3b8] transition-colors",
+                indigoLabelHover,
+              )}
+            >
               Created by
             </p>
-            <div className="mt-2 flex items-center gap-3">
-              <div className="grid size-9 place-items-center rounded-full bg-[#1E90FF] text-[11px] font-bold text-white transition-transform duration-300 group-hover:scale-110">
+            <div className="mt-1.5 flex items-center gap-2">
+              <div className="grid size-7 place-items-center rounded-full bg-[#1E90FF] text-[9px] font-bold text-white transition-transform duration-300 group-hover:scale-110">
                 {org.createdByInitial}
               </div>
-              <div>
-                <p className="text-[12px] font-semibold text-[#0f172a]">{org.createdByName}</p>
-                <p className="text-[10px] font-medium text-[#64748b]">{org.createdByEmail}</p>
+              <div className="min-w-0">
+                <p className="truncate text-[11px] font-semibold text-[#0f172a]">{org.createdByName}</p>
+                <p className="truncate text-[9px] font-medium text-[#64748b]">{org.createdByEmail}</p>
               </div>
             </div>
           </div>
@@ -266,7 +281,7 @@ function UsersPanel() {
               onMouseEnter={() => setFocused(u.email)}
               onMouseLeave={() => setFocused(null)}
               className={cn(
-                "flex flex-wrap items-center justify-between gap-3 rounded-xl border px-3.5 py-3 transition-all duration-300",
+                "group flex flex-wrap items-center justify-between gap-3 rounded-xl border px-3.5 py-3 transition-all duration-300",
                 on
                   ? indigoFocusRow
                   : cn("border-[#e2e8f0] bg-[#f8fafc]", indigoHover),
@@ -275,10 +290,8 @@ function UsersPanel() {
               <div className="flex items-center gap-3">
                 <div
                   className={cn(
-                    "grid size-8 place-items-center rounded-full text-[10px] font-bold transition-all duration-300",
-                    on
-                      ? "scale-110 bg-[#1E90FF] text-white"
-                      : "bg-[#e2e8f0] text-[#475569]",
+                    "grid size-8 place-items-center rounded-full bg-[#1E90FF] text-[10px] font-bold text-white transition-all duration-300 group-hover:scale-110",
+                    on && "scale-110",
                   )}
                 >
                   {u.name.charAt(0)}
@@ -351,6 +364,7 @@ function RolesPanel() {
 
 export function CustomerManagementPage({ data }: { data: CustomerMgmtData }) {
   const [tab, setTab] = useState<CustomerMgmtTab>("overview");
+  const [hoveredTab, setHoveredTab] = useState<CustomerMgmtTab | null>(null);
 
   return (
     <div className="flex w-full min-h-[calc(100vh-7rem)] flex-col gap-3 font-sans text-[#0f172a] antialiased">
@@ -382,29 +396,29 @@ export function CustomerManagementPage({ data }: { data: CustomerMgmtData }) {
         <div
           role="tablist"
           aria-label="Customer management sections"
-          className="grid w-full grid-cols-2 gap-1 rounded-xl border border-white/40 bg-white/25 p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] backdrop-blur-md sm:grid-cols-4"
+          className="grid w-full grid-cols-2 gap-1 rounded-xl border border-[#e2e8f0] bg-white/60 p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] backdrop-blur-md sm:grid-cols-4"
         >
           {TABS.map((item) => {
-            const active = tab === item.id;
+            const showHoverActive = hoveredTab === item.id;
+            const suppressSelectedActive = hoveredTab !== null && hoveredTab !== tab;
+            const active = tab === item.id && !suppressSelectedActive;
+            const highlighted = showHoverActive || active;
             return (
               <button
                 key={item.id}
                 type="button"
                 role="tab"
-                aria-selected={active}
+                aria-selected={tab === item.id}
                 onClick={() => setTab(item.id)}
+                onMouseEnter={() => setHoveredTab(item.id)}
+                onMouseLeave={() => setHoveredTab(null)}
                 className={cn(
-                  "relative z-10 w-full rounded-lg px-3 py-2.5 text-center text-[11px] font-semibold transition-colors duration-200",
-                  active ? "text-[#0f172a]" : "text-[#64748b] hover:text-[#1E90FF]",
+                  "relative z-10 w-full rounded-lg px-3 py-2.5 text-center text-[11px] font-semibold shadow-sm transition-all duration-200",
+                  highlighted
+                    ? "border-0 bg-[#1E90FF] text-white shadow-md"
+                    : "border border-transparent bg-transparent text-[#475569] hover:border-[#1E90FF]/30 hover:bg-[#E8F4FF] hover:text-[#1E90FF] dark:hover:border-[var(--hover-glass-border)] dark:hover:bg-[var(--hover-glass)] dark:hover:text-[#7ec8ff]",
                 )}
               >
-                {active && (
-                  <motion.span
-                    layoutId="customer-tab-pill"
-                    className="absolute inset-0 -z-10 rounded-lg border border-white/50 bg-white/35 shadow-[0_4px_16px_-6px_rgba(15,23,42,0.12)] backdrop-blur-md"
-                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                  />
-                )}
                 {item.label}
               </button>
             );

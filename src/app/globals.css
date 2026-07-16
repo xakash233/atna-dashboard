@@ -1,6 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 @import "leaflet/dist/leaflet.css";
+
 
 /* Atna Brand landing page theme alignment */
 :root {
@@ -33,7 +35,7 @@
   --sidebar-hover: #eef0f3;
   --sidebar-active: #0f172a;
   --sidebar-accent: #1e90ff;
-  --sidebar-width: 220px;
+  --sidebar-width: 72px;
 
   --bg: #f4f5f7;
   --bg-nav: #ffffff;
@@ -70,11 +72,12 @@
   --bolt-negative-text: #dc2626;
 }
 
-:root.sidebar-collapsed {
-  --sidebar-width: 72px;
+:root.sidebar-expanded {
+  --sidebar-width: 220px;
 }
 
 .dark {
+  color-scheme: dark;
   --pastel-bg: #0f1117;
   --pastel-canvas: #151821;
   --pastel-card: #1a1d27;
@@ -115,6 +118,10 @@
   --card-hover-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.45);
   --pastel-shadow: 0 10px 24px -12px rgba(0, 0, 0, 0.35);
   --pastel-shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.25);
+  /* Same soft glass as org-code field panels */
+  --hover-glass: #222633;
+  --hover-glass-border: rgba(255, 255, 255, 0.1);
+  --hover-glass-strong: #2c3140;
 }
 
 :root.accent-indigo {
@@ -243,11 +250,127 @@ body {
 }
 
 body {
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 45%, #eef2f6 100%) !important;
+  background: linear-gradient(
+    135deg,
+    var(--pastel-bg) 0%,
+    var(--pastel-canvas) 45%,
+    var(--pastel-bg) 100%
+  ) !important;
   background-attachment: fixed !important;
   color: var(--pastel-text);
   font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif !important;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Dark mode: remap light-only Boltshift utilities used across pages */
+.dark .bg-white {
+  background-color: var(--pastel-card) !important;
+}
+
+.dark .bg-white\/95 {
+  background-color: color-mix(in srgb, var(--pastel-card) 95%, transparent) !important;
+}
+
+.dark .bg-white\/60 {
+  background-color: color-mix(in srgb, var(--pastel-card) 60%, transparent) !important;
+}
+
+.dark .bg-white\/5 {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.dark .bg-\[\#f8fafc\],
+.dark .bg-\[\#f4f5f7\],
+.dark .bg-\[\#eef0f3\] {
+  background-color: var(--surface-muted) !important;
+}
+
+.dark .bg-\[\#E8F4FF\] {
+  background-color: var(--hover-glass) !important;
+}
+
+.dark .text-\[\#0f172a\],
+.dark .text-\[\#111827\] {
+  color: var(--pastel-text) !important;
+}
+
+.dark .text-\[\#475569\],
+.dark .text-\[\#64748b\],
+.dark .text-\[\#94a3b8\],
+.dark .text-\[\#6b7280\] {
+  color: var(--pastel-muted) !important;
+}
+
+.dark .border-\[\#e2e8f0\] {
+  border-color: var(--border) !important;
+}
+
+.dark .placeholder\:text-\[\#94a3b8\]::placeholder {
+  color: var(--pastel-muted) !important;
+}
+
+.dark .shadow-\[inset_0_1px_0_rgba\(255\,255\,255\,0\.5\)\] {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+}
+
+/*
+ * Dark theme only: every light-mode hover wash → org-code glass panel colour.
+ * Light mode is untouched (still #E8F4FF / white hovers).
+ */
+.dark .hover\:bg-\[\#E8F4FF\]:hover,
+.dark .hover\:bg-\[\#E8F4FF\]\/50:hover,
+.dark .hover\:bg-\[\#E8F4FF\]\/40:hover,
+.dark .hover\:bg-\[\#f8fafc\]:hover,
+.dark .hover\:bg-\[\#eff6ff\]:hover,
+.dark .hover\:bg-\[\#eef2ff\]:hover,
+.dark .hover\:bg-white:hover,
+.dark .hover\:bg-white\/10:hover,
+.dark .hover\:bg-white\/5:hover,
+.dark .hover\:bg-white\/\[0\.08\]:hover,
+.dark .hover\:bg-surface-muted:hover,
+.dark .hover\:bg-overlay:hover,
+.dark .hover\:bg-\[var\(--accent-soft\)\]:hover,
+.dark .hover\:bg-accent-soft:hover,
+.dark .hover\:bg-\[var\(--hover-glass\)\]:hover,
+.dark .dark\:hover\:bg-white\/\[0\.08\]:hover,
+.dark .dark\:hover\:bg-\[var\(--accent-soft\)\]:hover,
+.dark .dark\:hover\:bg-\[\#222633\]:hover {
+  background-color: var(--hover-glass) !important;
+  border-color: var(--hover-glass-border) !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.dark .hover\:border-\[\#1E90FF\]\/40:hover,
+.dark .hover\:border-\[\#1E90FF\]\/30:hover,
+.dark .hover\:border-\[\#1e90ff\]\/40:hover,
+.dark .dark\:hover\:border-white\/15:hover {
+  border-color: var(--hover-glass-border) !important;
+}
+
+.dark .hover\:text-\[\#0f172a\]:hover {
+  color: var(--pastel-text) !important;
+}
+
+.dark .hover\:text-\[\#1E90FF\]:hover,
+.dark .hover\:text-\[\#1e90ff\]:hover {
+  color: #7ec8ff !important;
+}
+
+.dark .hover\:shadow-\[0_8px_20px_-10px_rgba\(30\,144\,255\,0\.35\)\]:hover,
+.dark .hover\:shadow-\[0_12px_24px_rgba\(30\,144\,255\,0\.16\)\]:hover,
+.dark .hover\:shadow-\[0_4px_12px_rgba\(30\,144\,255\,0\.18\)\,0_12px_24px_rgba\(30\,144\,255\,0\.08\)\]:hover,
+.dark .hover\:shadow-\[0_12px_24px_rgba\(30\,144\,255\,0\.16\)\,0_4px_12px_rgba\(30\,144\,255\,0\.08\)\]:hover,
+.dark .hover\:shadow-\[0_12px_24px_-10px_rgba\(15\,23\,42\,0\.14\)\]:hover {
+  box-shadow: none !important;
+}
+
+.dark [class*="hover:bg-[#E8F4FF]"]:hover,
+.dark [class*="hover:bg-accent-soft"]:hover,
+.dark [class*="hover:bg-white/[0.08]"]:hover {
+  background-color: var(--hover-glass) !important;
+  border-color: var(--hover-glass-border) !important;
 }
 
 h1,

@@ -8,6 +8,7 @@ import { cn } from "@/lib/cn";
 
 export function TruDocPage({ data }: { data: TruDocData }) {
   const [mode, setMode] = useState<"single" | "bulk">("single");
+  const [hoveredMode, setHoveredMode] = useState<"single" | "bulk" | null>(null);
   const [query, setQuery] = useState("");
 
   const filtered = data.documents.filter(
@@ -16,59 +17,65 @@ export function TruDocPage({ data }: { data: TruDocData }) {
       d.name.toLowerCase().includes(query.toLowerCase()) ||
       d.id.toLowerCase().includes(query.toLowerCase()),
   );
+  const metrics = [
+    {
+      id: "checked",
+      label: "Total checked",
+      hint: data.metrics.totalChecked.delta,
+      value: data.metrics.totalChecked.value,
+    },
+    {
+      id: "pass",
+      label: "Verification pass rate",
+      hint: data.metrics.passRate.delta,
+      value: data.metrics.passRate.value,
+    },
+    {
+      id: "flagged",
+      label: "Flagged documents",
+      hint: data.metrics.flagged.delta,
+      value: data.metrics.flagged.value,
+    },
+    {
+      id: "avg",
+      label: "Avg verification time",
+      hint: "Current SLA",
+      value: data.metrics.avgTime === "—" ? 0 : data.metrics.avgTime,
+    },
+  ];
 
   return (
-    <div className="mx-auto flex w-full max-w-[1100px] flex-col gap-5">
+    <div className="flex w-full min-h-[calc(100vh-7rem)] flex-col gap-3 font-sans text-[#0f172a] antialiased">
       <FadeIn>
         <div>
-          <p className="text-xs font-medium uppercase tracking-[0.16em] text-pastel-muted">
+          <p className="text-[9px] font-semibold uppercase tracking-[0.16em] text-[#94a3b8]">
             Intelli Hire
           </p>
-          <h1 className="mt-1 text-2xl font-bold tracking-tight text-pastel-text sm:text-[28px]">
+          <h1 className="mt-1 font-sans text-xl font-semibold tracking-wide text-[#0f172a] sm:text-[28px]">
             TRU. Doc
           </h1>
-          <p className="mt-1 text-sm text-pastel-muted">
+          <p className="mt-1 text-[10px] font-medium text-[#475569]">
             Payslips, experience letters, degrees — verified, not trusted.
           </p>
         </div>
       </FadeIn>
 
-      <Stagger className="flex flex-col gap-5" delay={0.04}>
+      <Stagger className="flex flex-col gap-3" delay={0.04}>
         <StaggerItem>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            <div className="pastel-metric-hero flex min-h-[120px] flex-col justify-between p-5 sm:p-6">
-              <p className="text-sm font-medium text-white/85">Total Checked</p>
-              <div>
-                <p className="text-[28px] font-bold tracking-tight text-white sm:text-[32px]">
-                  {data.metrics.totalChecked.value}
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            {metrics.map((m) => (
+              <article
+                key={m.id}
+                className="group relative overflow-hidden rounded-2xl border border-[#e2e8f0] bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.01),0_8px_16px_rgba(0,0,0,0.01)] transition-all duration-300 hover:-translate-y-1 hover:border-[#1E90FF]/40 hover:shadow-[0_12px_24px_rgba(30,144,255,0.16)]"
+              >
+                <div className="absolute bottom-0 left-0 right-0 h-1 origin-left scale-x-0 bg-[#1E90FF] transition-transform duration-500 group-hover:scale-x-100" />
+                <p className="text-[9px] font-semibold uppercase tracking-wider text-[#64748b]">{m.label}</p>
+                <p className="mt-2 font-sans text-[22px] font-semibold leading-none text-[#0f172a]">
+                  {m.value}
                 </p>
-                <p className="mt-1 text-xs text-white/70">{data.metrics.totalChecked.delta}</p>
-              </div>
-            </div>
-            <div className="pastel-card flex min-h-[120px] flex-col justify-between p-5 sm:p-6">
-              <p className="text-sm font-medium text-pastel-muted">Verification Pass Rate</p>
-              <div>
-                <p className="text-[28px] font-bold tracking-tight text-pastel-text sm:text-[32px]">
-                  {data.metrics.passRate.value}
-                </p>
-                <p className="mt-1 text-xs text-pastel-muted">{data.metrics.passRate.delta}</p>
-              </div>
-            </div>
-            <div className="pastel-card flex min-h-[120px] flex-col justify-between p-5 sm:p-6">
-              <p className="text-sm font-medium text-pastel-muted">Flagged Documents</p>
-              <div>
-                <p className="text-[28px] font-bold tracking-tight text-pastel-text sm:text-[32px]">
-                  {data.metrics.flagged.value}
-                </p>
-                <p className="mt-1 text-xs text-pastel-muted">{data.metrics.flagged.delta}</p>
-              </div>
-            </div>
-            <div className="pastel-card flex min-h-[120px] flex-col justify-between p-5 sm:p-6">
-              <p className="text-sm font-medium text-pastel-muted">Avg Verification Time</p>
-              <p className="text-[28px] font-bold tracking-tight text-pastel-text sm:text-[32px]">
-                {data.metrics.avgTime}
-              </p>
-            </div>
+                <p className="mt-2 text-[9px] font-medium uppercase tracking-wide text-[#94a3b8]">{m.hint}</p>
+              </article>
+            ))}
           </div>
         </StaggerItem>
 
@@ -85,11 +92,13 @@ export function TruDocPage({ data }: { data: TruDocData }) {
                   key={id}
                   type="button"
                   onClick={() => setMode(id)}
+                  onMouseEnter={() => setHoveredMode(id)}
+                  onMouseLeave={() => setHoveredMode(null)}
                   className={cn(
-                    "rounded-xl px-4 py-2.5 text-sm font-medium transition",
-                    mode === id
-                      ? "bg-[#e8eaed] text-[#1e293b] dark:bg-white/10 dark:text-pastel-text"
-                      : "bg-pastel-card text-pastel-muted",
+                    "rounded-full px-5 py-2.5 text-[10px] font-semibold shadow-sm transition-all duration-200",
+                    (hoveredMode === id || (mode === id && !(hoveredMode && hoveredMode !== mode)))
+                      ? "border-0 bg-[#1E90FF] text-white shadow-md"
+                      : "border border-[#e2e8f0] bg-white text-[#0f172a] hover:border-[#1E90FF]/40 hover:bg-[#E8F4FF] hover:text-[#1E90FF]",
                   )}
                 >
                   {label}
@@ -100,28 +109,28 @@ export function TruDocPage({ data }: { data: TruDocData }) {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search by name or filename…"
-              className="w-full rounded-xl border border-[rgba(180,168,204,0.4)] bg-pastel-card px-4 py-2.5 text-sm text-pastel-text outline-none focus:ring-2 focus:ring-pastel-lavender/50 sm:max-w-xs"
+              className="w-full rounded-full border border-[#e2e8f0] bg-white px-4 py-2.5 text-[10px] font-medium text-[#0f172a] outline-none transition focus:border-[#1E90FF]/40 focus:ring-2 focus:ring-[#1E90FF]/20 sm:max-w-xs"
             />
           </div>
         </StaggerItem>
 
         <StaggerItem>
-          <section className="pastel-card overflow-hidden">
-            <div className="border-b border-[rgba(180,168,204,0.25)] px-5 py-4">
-              <h2 className="text-base font-semibold text-pastel-text">
+          <section className="overflow-hidden rounded-2xl border border-[#e2e8f0] bg-white shadow-[0_1px_3px_rgba(0,0,0,0.01),0_8px_16px_rgba(0,0,0,0.01)] transition-all duration-300 hover:border-[#1E90FF]/40 hover:shadow-[0_4px_12px_rgba(30,144,255,0.18),0_12px_24px_rgba(30,144,255,0.08)]">
+            <div className="border-b border-[#e2e8f0] px-4 py-3 sm:px-5">
+              <h2 className="text-[10px] font-semibold uppercase tracking-wider text-[#0f172a]">
                 Document Records{" "}
-                <span className="text-pastel-muted">{filtered.length} shown</span>
+                <span className="text-[#475569]">{filtered.length} shown</span>
               </h2>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full min-w-[720px] text-left">
                 <thead>
-                  <tr className="border-b border-[rgba(180,168,204,0.2)] bg-[rgba(180,168,204,0.08)]">
+                  <tr className="border-b border-[#e2e8f0] bg-[#f8fafc]">
                     {["ID", "Document Name", "ATNA Score", "Verdict", "Upload Date", "Status"].map(
                       (h) => (
                         <th
                           key={h}
-                          className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-pastel-muted"
+                          className="px-4 py-2.5 text-[8px] font-semibold uppercase tracking-wider text-[#475569]"
                         >
                           {h}
                         </th>
@@ -131,17 +140,13 @@ export function TruDocPage({ data }: { data: TruDocData }) {
                 </thead>
                 <tbody>
                   {filtered.map((doc) => (
-                    <tr key={doc.id} className="border-b border-[rgba(180,168,204,0.15)]">
-                      <td className="px-4 py-3 font-mono text-xs text-pastel-muted">{doc.id}</td>
-                      <td className="px-4 py-3 text-sm font-medium text-pastel-text">{doc.name}</td>
-                      <td className="px-4 py-3 text-sm text-pastel-text">{doc.atnaScore}</td>
-                      <td className="px-4 py-3">
-                        <span className="rounded-lg bg-pastel-peach/40 px-2.5 py-1 text-xs font-semibold text-amber-900 dark:text-pastel-peach">
-                          {doc.verdict}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3 text-sm text-pastel-muted">{doc.uploadDate}</td>
-                      <td className="px-4 py-3 text-sm text-pastel-text">{doc.status}</td>
+                    <tr key={doc.id} className="border-b border-[#e2e8f0] transition-colors hover:bg-[#E8F4FF]/50">
+                      <td className="px-4 py-3 font-mono text-[10px] font-medium text-[#1E90FF]">{doc.id}</td>
+                      <td className="px-4 py-3 text-[10px] font-semibold text-[#0f172a]">{doc.name}</td>
+                      <td className="px-4 py-3 text-[10px] font-medium text-[#0f172a]">{doc.atnaScore}</td>
+                      <td className="px-4 py-3 text-[10px] font-medium text-[#475569]">{doc.verdict}</td>
+                      <td className="px-4 py-3 text-[10px] font-medium text-[#475569]">{doc.uploadDate}</td>
+                      <td className="px-4 py-3 text-[10px] font-medium text-[#0f172a]">{doc.status}</td>
                     </tr>
                   ))}
                 </tbody>

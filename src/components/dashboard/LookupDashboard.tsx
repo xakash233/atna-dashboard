@@ -24,28 +24,24 @@ const METRICS = [
     value: "1,248",
     delta: "+12.4%",
     direction: "up" as const,
-    tone: "positive" as const,
   },
   {
     label: "Safe signals found",
     value: "912",
     delta: "+8.2%",
     direction: "up" as const,
-    tone: "positive" as const,
   },
   {
     label: "Mid signals found",
     value: "215",
     delta: "-3.1%",
     direction: "down" as const,
-    tone: "negative" as const,
   },
   {
     label: "Risk signals found",
     value: "121",
     delta: "+1.8%",
     direction: "up" as const,
-    tone: "positive" as const,
   },
 ] as const;
 
@@ -253,22 +249,20 @@ function CalendarIcon({ className }: { className?: string }) {
 function TrendBadge({
   delta,
   direction,
-  tone,
 }: {
   delta: string;
   direction: "up" | "down";
-  tone: "positive" | "negative";
 }) {
-  const isPos = tone === "positive";
+  const isUp = direction === "up";
   return (
     <span
       className={`inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 text-[10px] font-semibold border ${
-        isPos 
-          ? "bg-[#e6fbf7] text-[#0f766e] border-[#a7f3d0]" 
+        isUp
+          ? "bg-[#e6fbf7] text-[#0f766e] border-[#a7f3d0]"
           : "bg-[#fee2e2] text-[#b91c1c] border-[#fecaca]"
       }`}
     >
-      {delta} {direction === "up" ? "↑" : "↓"}
+      {delta} {isUp ? "↑" : "↓"}
     </span>
   );
 }
@@ -313,14 +307,14 @@ export function LookupDashboard() {
   const riskCount = 121;
 
   return (
-    <div className="flex w-full flex-col gap-3 bg-transparent font-sans text-[#0f172a] antialiased min-h-screen">
+    <div className="flex min-h-screen w-full flex-col gap-3 bg-transparent font-sans text-[#0f172a] antialiased dark:text-pastel-text">
       <FadeIn>
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between mb-1">
+        <div className="mb-1 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <h1 className="text-xl font-semibold tracking-wide text-[#0f172a] sm:text-[28px] font-sans">
+            <h1 className="font-sans text-xl font-semibold tracking-wide text-[#0f172a] dark:text-pastel-text sm:text-[28px]">
               Dashboard
             </h1>
-            <p className="mt-1 text-[10px] text-[#475569] font-medium">
+            <p className="mt-1 text-[10px] font-medium text-[#475569] dark:text-pastel-muted">
               Monitor your system performance and key metrics
             </p>
           </div>
@@ -468,7 +462,7 @@ export function LookupDashboard() {
                       {m.value}
                     </p>
                     <span className="inline-block transition-transform duration-300 group-hover:scale-105">
-                      <TrendBadge delta={m.delta} direction={m.direction} tone={m.tone} />
+                      <TrendBadge delta={m.delta} direction={m.direction} />
                     </span>
                   </div>
                   <p className="relative z-10 mt-2 text-[8px] font-medium uppercase tracking-wider text-[#475569] transition-colors duration-300 group-hover:text-[#1E90FF]">
@@ -873,7 +867,13 @@ export function LookupDashboard() {
                         <p className="text-[10px] font-semibold text-[#0f172a]">{branch.name}</p>
                         <div className="flex items-center gap-1.5">
                           <span className="text-[10px] font-semibold text-[#0f172a]">{branch.count}</span>
-                          <span className="inline-flex items-center rounded border border-[#e2e8f0] bg-[#f8fafc] px-1.5 py-0.25 text-[7px] font-semibold text-[#475569]">
+                          <span
+                            className={`inline-flex items-center rounded border px-1.5 py-0.25 text-[7px] font-semibold ${
+                              isUp
+                                ? "border-[#a7f3d0] bg-[#e6fbf7] text-[#0f766e]"
+                                : "border-[#fecaca] bg-[#fee2e2] text-[#b91c1c]"
+                            }`}
+                          >
                             {branch.delta} {isUp ? "↑" : "↓"}
                           </span>
                         </div>

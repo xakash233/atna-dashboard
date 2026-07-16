@@ -1,114 +1,120 @@
 "use client";
 import AnimatedButton from "@/components/ui/AnimatedButton";
+import { useState } from "react";
 
 import { FadeIn, Stagger, StaggerItem } from "@/components/ui/Motion";
 import type { DeepfakeData } from "@/lib/api/fraud";
 import { cn } from "@/lib/cn";
 
 export function DeepfakePage({ data }: { data: DeepfakeData }) {
+  const [activeView, setActiveView] = useState<"analyze" | "recorded" | "live">("analyze");
+  const [hoveredView, setHoveredView] = useState<"analyze" | "recorded" | "live" | null>(null);
+
+  const metrics = [
+    {
+      id: "videos",
+      label: "Videos analyzed",
+      hint: "Total deepfake scans",
+      value: data.metrics.videosAnalyzed,
+    },
+    {
+      id: "authentic",
+      label: "Authentic",
+      hint: "Passed as genuine",
+      value: data.metrics.authentic,
+    },
+    {
+      id: "ai-generated",
+      label: "AI-generated",
+      hint: "Flagged as deepfake",
+      value: data.metrics.aiGenerated,
+    },
+  ];
+  const actionButtons = [
+    { id: "analyze" as const, label: "Analyze Video" },
+    { id: "recorded" as const, label: "Recorded Video" },
+    { id: "live" as const, label: "Live Interview" },
+  ];
+
   return (
-    <div className="mx-auto flex w-full max-w-[1100px] flex-col gap-5">
+    <div className="flex w-full min-h-[calc(100vh-7rem)] flex-col gap-3 font-sans text-[#0f172a] antialiased">
       <FadeIn>
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div className="mb-1 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <p className="text-xs font-medium uppercase tracking-[0.16em] text-pastel-muted">
+            <p className="text-[9px] font-semibold uppercase tracking-[0.16em] text-[#94a3b8]">
               Intelli Hire
             </p>
-            <h1 className="mt-1 text-2xl font-bold tracking-tight text-pastel-text sm:text-[28px]">
+            <h1 className="mt-1 font-sans text-xl font-semibold tracking-wide text-[#0f172a] sm:text-[28px]">
               Deepfake Detection
             </h1>
-            <p className="mt-1 text-sm text-pastel-muted">
+            <p className="mt-1 text-[10px] font-medium text-[#475569]">
               Detect AI-generated and manipulated candidate videos
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
-            <AnimatedButton
-              type="button"
-              className="rounded-xl bg-pastel-lavender-deep px-4 py-2.5 text-sm font-semibold text-white"
-            >
-              Analyze Video
-            </AnimatedButton>
-            <AnimatedButton
-              type="button"
-              className="rounded-xl border border-[rgba(180,168,204,0.45)] bg-pastel-card px-4 py-2.5 text-sm font-semibold text-pastel-text"
-            >
-              Recorded Video
-            </AnimatedButton>
-            <AnimatedButton
-              type="button"
-              className="rounded-xl border border-[rgba(180,168,204,0.45)] bg-pastel-card px-4 py-2.5 text-sm font-semibold text-pastel-text"
-            >
-              Live Interview
-            </AnimatedButton>
+            {actionButtons.map((button) => {
+              const showHoverActive = hoveredView === button.id;
+              const suppressSelectedActive = hoveredView !== null && hoveredView !== activeView;
+              const active = activeView === button.id && !suppressSelectedActive;
+              const highlighted = showHoverActive || active;
+              return (
+                <AnimatedButton
+                  key={button.id}
+                  type="button"
+                  onClick={() => setActiveView(button.id)}
+                  onMouseEnter={() => setHoveredView(button.id)}
+                  onMouseLeave={() => setHoveredView(null)}
+                  className={cn(
+                    "inline-flex items-center rounded-full px-5 py-2.5 text-[10px] font-semibold shadow-sm transition-all duration-200",
+                    highlighted
+                      ? "border-0 bg-[#1E90FF] text-white shadow-md"
+                      : "border border-[#e2e8f0] bg-white text-[#0f172a] hover:border-[#1E90FF] hover:bg-[#1E90FF] hover:text-white",
+                  )}
+                >
+                  {button.label}
+                </AnimatedButton>
+              );
+            })}
           </div>
         </div>
       </FadeIn>
 
-      <Stagger className="flex flex-col gap-5" delay={0.04}>
+      {activeView === "analyze" ? (
+        <Stagger className="flex flex-col gap-3" delay={0.04}>
         <StaggerItem>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-            {[
-              {
-                label: "Videos Analyzed",
-                sub: "Total deepfake scans",
-                value: data.metrics.videosAnalyzed,
-                hero: true,
-              },
-              {
-                label: "Authentic",
-                sub: "Passed as genuine",
-                value: data.metrics.authentic,
-                hero: false,
-              },
-              {
-                label: "AI-Generated",
-                sub: "Flagged as deepfake",
-                value: data.metrics.aiGenerated,
-                hero: false,
-              },
-            ].map((m) => (
-              <div
-                key={m.label}
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+            {metrics.map((m) => (
+              <article
+                key={m.id}
                 className={cn(
-                  "flex min-h-[120px] flex-col justify-between p-5 sm:p-6",
-                  m.hero ? "pastel-metric-hero" : "pastel-card",
+                  "group relative overflow-hidden rounded-2xl border border-[#e2e8f0] bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.01),0_8px_16px_rgba(0,0,0,0.01)] transition-all duration-300 hover:-translate-y-1 hover:border-[#1E90FF]/40 hover:shadow-[0_12px_24px_rgba(30,144,255,0.16)]",
                 )}
               >
-                <div>
-                  <p className={cn("text-sm font-medium", m.hero ? "text-white/85" : "text-pastel-muted")}>
-                    {m.label}
-                  </p>
-                  <p className={cn("mt-1 text-xs", m.hero ? "text-white/70" : "text-pastel-muted")}>{m.sub}</p>
-                </div>
-                <p
-                  className={cn(
-                    "text-[28px] font-bold tracking-tight sm:text-[32px]",
-                    m.hero ? "text-white" : "text-pastel-text",
-                  )}
-                >
-                  {m.value}
-                </p>
-              </div>
+                <div className="absolute bottom-0 left-0 right-0 h-1 origin-left scale-x-0 bg-[#1E90FF] transition-transform duration-500 group-hover:scale-x-100" />
+                <p className="text-[9px] font-semibold uppercase tracking-wider text-[#64748b]">{m.label}</p>
+                <p className="mt-2 font-sans text-[22px] font-semibold leading-none text-[#0f172a]">{m.value}</p>
+                <p className="mt-2 text-[9px] font-medium uppercase tracking-wide text-[#94a3b8]">{m.hint}</p>
+              </article>
             ))}
           </div>
         </StaggerItem>
 
         <StaggerItem>
-          <section className="pastel-card overflow-hidden">
-            <div className="border-b border-[rgba(180,168,204,0.25)] px-5 py-4">
-              <h2 className="text-base font-semibold text-pastel-text">
+          <section className="overflow-hidden rounded-2xl border border-[#e2e8f0] bg-white shadow-[0_1px_3px_rgba(0,0,0,0.01),0_8px_16px_rgba(0,0,0,0.01)] transition-all duration-300 hover:border-[#1E90FF]/40 hover:shadow-[0_4px_12px_rgba(30,144,255,0.18),0_12px_24px_rgba(30,144,255,0.08)]">
+            <div className="border-b border-[#e2e8f0] px-4 py-3 sm:px-5">
+              <h2 className="text-[10px] font-semibold uppercase tracking-wider text-[#0f172a]">
                 Analyzed Videos ({data.videos.length})
               </h2>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full min-w-[640px] text-left">
                 <thead>
-                  <tr className="border-b border-[rgba(180,168,204,0.2)] bg-[rgba(180,168,204,0.08)]">
+                  <tr className="border-b border-[#e2e8f0] bg-[#f8fafc]">
                     {["File", "Fake Probability", "Reason", "Verdict", "Date", "Actions"].map(
                       (h) => (
                         <th
                           key={h}
-                          className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-pastel-muted"
+                          className="px-4 py-2.5 text-[8px] font-semibold uppercase tracking-wider text-[#475569]"
                         >
                           {h}
                         </th>
@@ -118,17 +124,13 @@ export function DeepfakePage({ data }: { data: DeepfakeData }) {
                 </thead>
                 <tbody>
                   {data.videos.map((row) => (
-                    <tr key={row.file} className="border-b border-[rgba(180,168,204,0.15)]">
-                      <td className="px-4 py-3 text-sm font-medium text-pastel-text">{row.file}</td>
-                      <td className="px-4 py-3 text-sm text-pastel-text">{row.fakeProbability}</td>
-                      <td className="px-4 py-3 text-sm text-pastel-muted">{row.reason}</td>
-                      <td className="px-4 py-3">
-                        <span className="rounded-lg bg-pastel-mint/40 px-2.5 py-1 text-xs font-semibold text-emerald-800 dark:text-pastel-mint">
-                          {row.verdict}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3 text-sm text-pastel-muted">{row.date}</td>
-                      <td className="px-4 py-3 text-sm text-pastel-muted">—</td>
+                    <tr key={row.file} className="border-b border-[#e2e8f0] transition-colors hover:bg-[#E8F4FF]/50">
+                      <td className="px-4 py-3 text-[10px] font-semibold text-[#0f172a]">{row.file}</td>
+                      <td className="px-4 py-3 text-[10px] font-medium text-[#0f172a]">{row.fakeProbability}</td>
+                      <td className="px-4 py-3 text-[10px] font-medium text-[#475569]">{row.reason}</td>
+                      <td className="px-4 py-3 text-[10px] font-medium text-[#475569]">{row.verdict}</td>
+                      <td className="px-4 py-3 text-[10px] font-medium text-[#475569]">{row.date}</td>
+                      <td className="px-4 py-3 text-[10px] font-medium text-[#94a3b8]">—</td>
                     </tr>
                   ))}
                 </tbody>
@@ -136,7 +138,21 @@ export function DeepfakePage({ data }: { data: DeepfakeData }) {
             </div>
           </section>
         </StaggerItem>
-      </Stagger>
+        </Stagger>
+      ) : (
+        <FadeIn delay={0.06}>
+          <section className="flex min-h-[calc(100vh-14rem)] flex-1 items-center justify-center rounded-2xl border border-[#e2e8f0] bg-white shadow-[0_1px_3px_rgba(0,0,0,0.01),0_8px_16px_rgba(0,0,0,0.01)]">
+            <div className="text-center">
+              <h2 className="text-[12px] font-semibold uppercase tracking-wider text-[#0f172a]">
+                {activeView === "recorded" ? "Recorded Video" : "Live Interview"}
+              </h2>
+              <p className="mt-2 text-[10px] font-medium text-[#64748b]">
+                Empty until API data is connected for this section.
+              </p>
+            </div>
+          </section>
+        </FadeIn>
+      )}
     </div>
   );
 }

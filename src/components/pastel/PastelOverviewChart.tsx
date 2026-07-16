@@ -12,6 +12,7 @@ import {
   YAxis,
 } from "recharts";
 import { cn } from "@/lib/cn";
+import { ChartTooltip, chartTooltipShell } from "@/components/ui/ChartTooltip";
 
 const DATA = [
   { m: "Jan", sales: 28, earnings: 42 },
@@ -99,13 +100,8 @@ export function PastelOverviewChart() {
             <XAxis dataKey="m" hide />
             <YAxis hide domain={[0, 100]} />
             <Tooltip
-              contentStyle={{
-                background: "#fff",
-                border: "1px solid rgba(180,168,204,0.35)",
-                borderRadius: 12,
-                color: "#3d3552",
-                boxShadow: "0 10px 28px rgba(140,120,180,0.15)",
-              }}
+              {...chartTooltipShell}
+              content={<ChartTooltip labelFormatter={(month) => `${month} Overview`} />}
             />
             <Area
               type="monotone"

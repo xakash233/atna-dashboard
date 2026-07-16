@@ -17,6 +17,7 @@ import {
   Legend,
 } from "recharts";
 import { FadeIn, Stagger, StaggerItem } from "@/components/ui/Motion";
+import { ChartTooltip, chartTooltipShell } from "@/components/ui/ChartTooltip";
 import type {
   TrackerCredit,
   TrackerDashboardData,
@@ -212,7 +213,7 @@ function OverviewPanel({
             <div className="sm:col-span-2">
               <DetailField label="Created by">
                 <div className="flex items-center gap-2.5">
-                  <span className="grid size-8 place-items-center rounded-full bg-accent-soft text-xs font-bold text-accent">
+                  <span className="grid size-8 place-items-center rounded-full bg-[#1E90FF] text-xs font-bold text-white transition-transform duration-200 hover:scale-110">
                     {org.createdByName.charAt(0)}
                   </span>
                   <div className="min-w-0">
@@ -416,14 +417,8 @@ function UsagePanel() {
                   axisLine={false}
                 />
                 <Tooltip
-                  contentStyle={{
-                    backgroundColor: "var(--pastel-card)",
-                    borderColor: "var(--border)",
-                    borderRadius: "12px",
-                    color: "var(--pastel-text)",
-                    fontSize: "12px",
-                    boxShadow: "0 8px 24px -4px rgba(0,0,0,0.15)"
-                  }}
+                  {...chartTooltipShell}
+                  content={<ChartTooltip labelFormatter={(name) => `${name} Metrics`} />}
                   cursor={{ fill: "rgba(180, 168, 204, 0.05)" }}
                 />
                 <Bar dataKey={metric === "apiCalls" ? "apiCalls" : "latency"} radius={[6, 6, 0, 0]} maxBarSize={30}>
@@ -610,7 +605,7 @@ function UsersPanel({ totalUsers }: { totalUsers: number }) {
               <tr key={u.email} className="table-row-premium">
                 <td className="px-5 py-3.5">
                   <div className="flex items-center gap-3">
-                    <span className="grid size-8 place-items-center rounded-full bg-accent-soft text-xs font-bold text-accent">
+                    <span className="grid size-8 place-items-center rounded-full bg-[#1E90FF] text-xs font-bold text-white transition-transform duration-200 hover:scale-110">
                       {u.name.charAt(0)}
                     </span>
                     <div>

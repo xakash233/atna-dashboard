@@ -12,27 +12,29 @@ type CaseFiltersProps = {
 
 export function CaseFilters({ onFilterChange }: CaseFiltersProps) {
   const [active, setActive] = useState<(typeof FILTERS)[number]>("All Cases");
+  const [hovered, setHovered] = useState<(typeof FILTERS)[number] | null>(null);
 
   return (
     <div className="flex flex-col items-stretch gap-3 sm:items-end">
-      <div
-        className="inline-flex rounded-xl border border-border bg-surface-muted p-[5px] shadow-sm backdrop-blur dark:bg-surface-solid"
-        role="tablist"
-        aria-label="Case filters"
-      >
+      <div className="flex flex-wrap gap-2" role="tablist" aria-label="Case filters">
         {FILTERS.map((filter) => {
-          const selected = filter === active;
+          const showHoverActive = hovered === filter;
+          const suppressSelectedActive = hovered !== null && hovered !== active;
+          const selected = filter === active && !suppressSelectedActive;
+          const highlighted = showHoverActive || selected;
           return (
             <AnimatedButton
               key={filter}
               type="button"
               role="tab"
-              aria-selected={selected}
+              aria-selected={filter === active}
+              onMouseEnter={() => setHovered(filter)}
+              onMouseLeave={() => setHovered(null)}
               className={cn(
-                "relative rounded-xl px-4 py-1.5 text-base transition duration-300",
-                selected
-                  ? "bg-surface-elevated text-fg shadow-[0_4px_16px_-6px_var(--glow-accent)]"
-                  : "text-fg-muted hover:text-fg",
+                "inline-flex items-center rounded-full px-5 py-2.5 text-[10px] font-semibold shadow-sm transition-all duration-200",
+                highlighted
+                  ? "border-0 bg-[#1E90FF] text-white shadow-md"
+                  : "border border-[#e2e8f0] bg-white text-[#0f172a] hover:border-[#1E90FF] hover:bg-[#1E90FF] hover:text-white",
               )}
               onClick={() => {
                 setActive(filter);
@@ -47,7 +49,7 @@ export function CaseFilters({ onFilterChange }: CaseFiltersProps) {
 
       <AnimatedButton
         type="button"
-        className="btn-premium inline-flex items-center gap-2 self-start rounded-xl border border-border-strong bg-surface-solid px-[17px] py-[9px] text-base text-fg shadow-sm transition hover:border-accent/35 hover:shadow-[0_8px_24px_-12px_var(--glow-accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:self-end"
+        className="inline-flex items-center gap-2 self-start rounded-full border border-[#e2e8f0] bg-white px-5 py-2.5 text-[10px] font-semibold text-[#0f172a] shadow-sm transition-all duration-200 hover:border-[#1E90FF]/40 hover:bg-[#E8F4FF] hover:text-[#1E90FF] sm:self-end"
       >
         <svg className="h-[9px] w-[13.5px]" viewBox="0 0 14 9" fill="none" aria-hidden>
           <path d="M1 1.5h12M3 4.5h8M5 7.5h4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />

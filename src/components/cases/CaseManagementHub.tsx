@@ -13,17 +13,17 @@ type CaseManagementHubProps = {
 
 export function CaseManagementHub({ data }: CaseManagementHubProps) {
   return (
-    <>
+    <div className="flex w-full min-h-[calc(100vh-7rem)] flex-col gap-3 font-sans text-[#0f172a] antialiased">
       <FadeIn>
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-          <div className="max-w-md">
-            <p className="mb-2 text-[11px] font-medium uppercase tracking-[0.18em] text-accent">
+        <div className="mb-1 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <p className="text-[9px] font-semibold uppercase tracking-[0.16em] text-[#94a3b8]">
               Intelligence Operations
             </p>
-            <h1 className="bg-gradient-to-r from-fg via-fg to-accent bg-clip-text text-2xl font-semibold tracking-tight text-transparent sm:text-[28px]">
+            <h1 className="mt-1 font-sans text-xl font-semibold tracking-wide text-[#0f172a] sm:text-[28px]">
               Case Management Hub
             </h1>
-            <p className="mt-2 text-base leading-6 text-fg-muted">
+            <p className="mt-1 text-[10px] font-medium text-[#475569]">
               Active monitoring and triage of intelligence reports.
             </p>
           </div>
@@ -31,11 +31,11 @@ export function CaseManagementHub({ data }: CaseManagementHubProps) {
         </div>
       </FadeIn>
 
-      <Stagger className="grid grid-cols-12 gap-6 pt-2" delay={0.12}>
-        <StaggerItem className="col-span-12 lg:col-span-8">
+      <Stagger className="grid grid-cols-12 gap-3 lg:items-stretch" delay={0.12}>
+        <StaggerItem className="col-span-12 min-h-0 lg:col-span-8">
           <CaseVolumeChart data={data.volume} />
         </StaggerItem>
-        <StaggerItem className="col-span-12 lg:col-span-4">
+        <StaggerItem className="col-span-12 min-h-0 lg:col-span-4">
           <RiskMatrix data={data.risk} totalLabel={data.totalLabel} />
         </StaggerItem>
       </Stagger>
@@ -43,6 +43,6 @@ export function CaseManagementHub({ data }: CaseManagementHubProps) {
       <FadeIn delay={0.28} y={20}>
         <PriorityQueue cases={data.cases} />
       </FadeIn>
-    </>
+    </div>
   );
 }

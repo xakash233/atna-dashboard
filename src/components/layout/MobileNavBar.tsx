@@ -231,13 +231,24 @@ export function MobileNavBar() {
                   >
                     <span>{isDark ? "Dark Mode" : "Light Mode"}</span>
                     {isDark ? (
-                      <svg className="size-3.5" viewBox="0 0 20 20" fill="none" aria-hidden>
-                        <path d="M15.8 11A6 6 0 0 1 9 4.2 6.1 6.1 0 1 0 15.8 11Z" stroke="currentColor" strokeWidth="1.5" />
+                      <svg className="size-3.5" viewBox="0 0 24 24" fill="none" aria-hidden>
+                        <path
+                          d="M20.5 14.2A8.2 8.2 0 0 1 9.8 3.5 8.5 8.5 0 1 0 20.5 14.2Z"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
                       </svg>
                     ) : (
-                      <svg className="size-3.5" viewBox="0 0 20 20" fill="none" aria-hidden>
-                        <circle cx="10" cy="10" r="3" stroke="currentColor" strokeWidth="1.5" />
-                        <path d="M10 2v2M10 16v2M2 10h2M16 10h2" stroke="currentColor" strokeWidth="1.5" />
+                      <svg className="size-3.5" viewBox="0 0 24 24" fill="none" aria-hidden>
+                        <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.6" />
+                        <path
+                          d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.05 5.05l1.55 1.55M17.4 17.4l1.55 1.55M17.4 6.6l1.55-1.55M5.05 18.95l1.55-1.55"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                          strokeLinecap="round"
+                        />
                       </svg>
                     )}
                   </AnimatedButton>

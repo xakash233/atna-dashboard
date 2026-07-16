@@ -12,6 +12,7 @@ import {
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import type { GrowthPoint } from "@/lib/types";
+import { ChartTooltip, chartTooltipShell } from "@/components/ui/ChartTooltip";
 
 type GrowthChartProps = {
   data: GrowthPoint[];
@@ -27,9 +28,6 @@ export function GrowthChart({ data }: GrowthChartProps) {
   const slate = isDark ? "#94a3b8" : "#64748b";
   const tick = isDark ? "#c9c4d7" : "#52525b";
   const grid = isDark ? "rgba(71,69,85,0.35)" : "rgba(212,212,216,0.55)";
-  const tooltipBg = isDark ? "#171b26" : "#fff";
-  const tooltipBorder = isDark ? "rgba(71,69,85,0.45)" : "rgba(212,212,216,0.9)";
-  const tooltipColor = isDark ? "#dfe2f1" : "#18181b";
 
   return (
     <section className="glass-card flex flex-col gap-6 p-6">
@@ -75,13 +73,8 @@ export function GrowthChart({ data }: GrowthChartProps) {
             <XAxis dataKey="day" hide />
             <YAxis hide domain={["dataMin - 40", "dataMax + 40"]} />
             <Tooltip
-              contentStyle={{
-                background: tooltipBg,
-                border: `1px solid ${tooltipBorder}`,
-                borderRadius: 12,
-                color: tooltipColor,
-                boxShadow: "0 12px 32px rgba(0,0,0,0.12)",
-              }}
+              {...chartTooltipShell}
+              content={<ChartTooltip labelFormatter={(day) => `${day} Snapshot`} />}
             />
             <Area
               type="monotone"

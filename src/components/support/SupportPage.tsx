@@ -1,9 +1,10 @@
 "use client";
-import AnimatedButton from "@/components/ui/AnimatedButton";
 
+import AnimatedButton from "@/components/ui/AnimatedButton";
 import { useState, type FormEvent } from "react";
 import { FadeIn, Stagger, StaggerItem } from "@/components/ui/Motion";
 import { cn } from "@/lib/cn";
+import { cardShell as baseCardShell } from "@/lib/ui";
 
 type SupportTab = "center" | "nps" | "help" | "tickets";
 
@@ -16,11 +17,19 @@ const TABS: { id: SupportTab; label: string }[] = [
 
 const PRIORITIES = ["Low", "Medium", "High", "Critical"] as const;
 
+const cardShell = cn(
+  baseCardShell,
+  "hover:border-[#1E90FF]/40 hover:shadow-[0_4px_12px_rgba(30,144,255,0.18),0_12px_24px_rgba(30,144,255,0.08)]",
+);
+
+const fieldClass =
+  "w-full rounded-xl border border-[#e2e8f0] bg-white px-4 py-2.5 text-[10px] font-medium text-[#0f172a] outline-none placeholder:text-[#94a3b8] transition focus:border-[#1E90FF]/40 focus:ring-2 focus:ring-[#1E90FF]/20 dark:border-[var(--border)] dark:bg-[var(--pastel-card)] dark:text-pastel-text";
+
 function EmptyPanel({ title, hint }: { title: string; hint: string }) {
   return (
-    <section className="pastel-card p-10 text-center">
-      <h2 className="text-base font-semibold text-pastel-text">{title}</h2>
-      <p className="mt-2 text-sm text-pastel-muted">{hint}</p>
+    <section className={cn(cardShell, "flex min-h-[calc(100vh-16rem)] flex-1 flex-col items-center justify-center p-10 text-center")}>
+      <h2 className="text-[12px] font-semibold uppercase tracking-wider text-[#0f172a]">{title}</h2>
+      <p className="mt-2 max-w-md text-[10px] font-medium text-[#64748b]">{hint}</p>
     </section>
   );
 }
@@ -37,43 +46,53 @@ function RaisedTicketsPanel() {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-5 xl:grid-cols-12">
-      <section className="pastel-card p-6 xl:col-span-7">
-        <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-          <h2 className="text-lg font-semibold text-pastel-text">Create new ticket</h2>
-          <span className="text-xs font-medium text-pastel-muted">Create ticket</span>
+    <div className="grid min-h-0 flex-1 grid-cols-1 gap-3 xl:grid-cols-12">
+      <section className={cn(cardShell, "flex flex-col p-4 sm:p-5 xl:col-span-7")}>
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+          <h2 className="text-[10px] font-semibold uppercase tracking-wider text-[#0f172a]">
+            Create new ticket
+          </h2>
+          <span className="text-[9px] font-medium uppercase tracking-wide text-[#94a3b8]">
+            Create ticket
+          </span>
         </div>
 
-        <form onSubmit={onSubmit} className="space-y-4">
+        <form onSubmit={onSubmit} className="flex flex-1 flex-col gap-3">
           <label className="block space-y-1.5">
-            <span className="text-sm font-medium text-pastel-text">Subject</span>
+            <span className="text-[9px] font-semibold uppercase tracking-wider text-[#64748b]">
+              Subject
+            </span>
             <input
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
               placeholder="Enter subject here"
               required
-              className="w-full rounded-xl border border-[rgba(180,168,204,0.4)] bg-pastel-bg/60 px-4 py-2.5 text-sm text-pastel-text outline-none placeholder:text-pastel-muted focus:ring-2 focus:ring-pastel-lavender/50"
+              className={fieldClass}
             />
           </label>
 
-          <label className="block space-y-1.5">
-            <span className="text-sm font-medium text-pastel-text">Describe the issue</span>
+          <label className="flex flex-1 flex-col space-y-1.5">
+            <span className="text-[9px] font-semibold uppercase tracking-wider text-[#64748b]">
+              Describe the issue
+            </span>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Enter in detail"
               required
-              rows={6}
-              className="w-full resize-y rounded-xl border border-[rgba(180,168,204,0.4)] bg-pastel-bg/60 px-4 py-2.5 text-sm text-pastel-text outline-none placeholder:text-pastel-muted focus:ring-2 focus:ring-pastel-lavender/50"
+              rows={8}
+              className={cn(fieldClass, "min-h-[160px] flex-1 resize-y")}
             />
           </label>
 
           <label className="block max-w-xs space-y-1.5">
-            <span className="text-sm font-medium text-pastel-text">Priority</span>
+            <span className="text-[9px] font-semibold uppercase tracking-wider text-[#64748b]">
+              Priority
+            </span>
             <select
               value={priority}
               onChange={(e) => setPriority(e.target.value as (typeof PRIORITIES)[number])}
-              className="w-full rounded-xl border border-[rgba(180,168,204,0.4)] bg-pastel-bg/60 px-4 py-2.5 text-sm text-pastel-text outline-none focus:ring-2 focus:ring-pastel-lavender/50"
+              className={fieldClass}
             >
               {PRIORITIES.map((p) => (
                 <option key={p} value={p}>
@@ -83,29 +102,31 @@ function RaisedTicketsPanel() {
             </select>
           </label>
 
-          <div className="flex flex-wrap items-center gap-3 pt-2">
+          <div className="flex flex-wrap items-center gap-3 pt-1">
             <AnimatedButton
               type="submit"
-              className="rounded-xl bg-pastel-lavender-deep px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:brightness-110"
+              className="rounded-full border-0 bg-[#1E90FF] px-5 py-2.5 text-[10px] font-semibold text-white shadow-sm transition hover:brightness-110"
             >
               Submit
             </AnimatedButton>
-            {submitted && (
-              <p className="text-sm text-pastel-muted">
+            {submitted ? (
+              <p className="text-[10px] font-medium text-[#64748b]">
                 Ticket form captured locally — API wiring pending.
               </p>
-            )}
+            ) : null}
           </div>
         </form>
       </section>
 
-      <section className="pastel-card overflow-hidden xl:col-span-5">
-        <div className="border-b border-[rgba(180,168,204,0.25)] px-5 py-4">
-          <h2 className="text-base font-semibold text-pastel-text">Ticket history</h2>
+      <section className={cn(cardShell, "flex min-h-[280px] flex-col overflow-hidden xl:col-span-5")}>
+        <div className="border-b border-[#e2e8f0] px-4 py-3 sm:px-5">
+          <h2 className="text-[10px] font-semibold uppercase tracking-wider text-[#0f172a]">
+            Ticket history
+          </h2>
         </div>
-        <div className="px-5 py-10 text-center">
-          <p className="text-sm text-pastel-muted">No tickets found.</p>
-          <p className="mt-1 text-xs text-pastel-muted">
+        <div className="flex flex-1 flex-col items-center justify-center px-5 py-10 text-center">
+          <p className="text-[10px] font-semibold text-[#0f172a]">No tickets found.</p>
+          <p className="mt-1 text-[10px] font-medium text-[#64748b]">
             Raised tickets will appear here when available.
           </p>
         </div>
@@ -116,40 +137,43 @@ function RaisedTicketsPanel() {
 
 export function SupportPage() {
   const [tab, setTab] = useState<SupportTab>("tickets");
+  const [hoveredTab, setHoveredTab] = useState<SupportTab | null>(null);
 
   return (
-    <div className="mx-auto flex w-full max-w-[1100px] flex-col gap-5">
+    <div className="flex w-full min-h-[calc(100vh-7rem)] flex-col gap-3 font-sans text-[#0f172a] antialiased">
       <FadeIn>
-        <div>
-          <p className="text-xs font-medium uppercase tracking-[0.16em] text-pastel-muted">
-            Intelli Suite
-          </p>
-          <h1 className="mt-1 text-2xl font-bold tracking-tight text-pastel-text sm:text-[28px]">
-            Support
-          </h1>
-          <p className="mt-1 text-sm text-pastel-muted">
-            Manage support queries, explore guides, and share feedback.
-          </p>
-        </div>
-      </FadeIn>
-
-      <Stagger className="flex flex-col gap-5" delay={0.04}>
-        <StaggerItem>
+        <div className="mb-1 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <p className="text-[9px] font-semibold uppercase tracking-[0.16em] text-[#94a3b8]">
+              Intelli Suite
+            </p>
+            <h1 className="mt-1 font-sans text-xl font-semibold tracking-wide text-[#0f172a] sm:text-[28px]">
+              Support
+            </h1>
+            <p className="mt-1 text-[10px] font-medium text-[#475569]">
+              Manage support queries, explore guides, and share feedback.
+            </p>
+          </div>
           <div role="tablist" aria-label="Support sections" className="flex flex-wrap gap-2">
             {TABS.map((item) => {
-              const active = tab === item.id;
+              const showHoverActive = hoveredTab === item.id;
+              const suppressSelectedActive = hoveredTab !== null && hoveredTab !== tab;
+              const active = tab === item.id && !suppressSelectedActive;
+              const highlighted = showHoverActive || active;
               return (
                 <AnimatedButton
                   key={item.id}
                   type="button"
                   role="tab"
-                  aria-selected={active}
+                  aria-selected={tab === item.id}
                   onClick={() => setTab(item.id)}
+                  onMouseEnter={() => setHoveredTab(item.id)}
+                  onMouseLeave={() => setHoveredTab(null)}
                   className={cn(
-                    "rounded-xl px-4 py-2.5 text-sm font-medium transition",
-                    active
-                      ? "bg-[#e8eaed] text-[#1e293b] shadow-sm dark:bg-white/10 dark:text-pastel-text"
-                      : "bg-pastel-card text-pastel-muted hover:bg-[rgba(180,168,204,0.18)] hover:text-pastel-text",
+                    "inline-flex items-center rounded-full px-5 py-2.5 text-[10px] font-semibold shadow-sm transition-all duration-200",
+                    highlighted
+                      ? "border-0 bg-[#1E90FF] text-white shadow-md"
+                      : "border border-[#e2e8f0] bg-white text-[#0f172a] hover:border-[#1E90FF] hover:bg-[#1E90FF] hover:text-white",
                   )}
                 >
                   {item.label}
@@ -157,28 +181,30 @@ export function SupportPage() {
               );
             })}
           </div>
-        </StaggerItem>
+        </div>
+      </FadeIn>
 
-        <StaggerItem>
-          {tab === "tickets" && <RaisedTicketsPanel />}
-          {tab === "center" && (
+      <Stagger className="flex min-h-0 flex-1 flex-col gap-3" delay={0.04}>
+        <StaggerItem className="flex min-h-0 flex-1 flex-col">
+          {tab === "tickets" ? <RaisedTicketsPanel /> : null}
+          {tab === "center" ? (
             <EmptyPanel
               title="Support center"
               hint="Guides and support links will appear here when content is connected."
             />
-          )}
-          {tab === "nps" && (
+          ) : null}
+          {tab === "nps" ? (
             <EmptyPanel
               title="Net promoter score"
               hint="NPS feedback collection is empty until survey data is provided."
             />
-          )}
-          {tab === "help" && (
+          ) : null}
+          {tab === "help" ? (
             <EmptyPanel
               title="Help center"
               hint="Help articles and FAQs — placeholder ready for integration."
             />
-          )}
+          ) : null}
         </StaggerItem>
       </Stagger>
     </div>

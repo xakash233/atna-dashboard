@@ -8,7 +8,7 @@ export const APP = {
 export const CURRENT_USER = {
   firstName: "Santhosh",
   lastName: "Kumar",
-  email: "santhoshatna@yopmail.com",
+  email: "kaushikganesh1512@gmail.com",
   mobile: "+91 1309218093",
   role: "QA SuperAdmin",
   displayName: "Santhosh Kumar",
