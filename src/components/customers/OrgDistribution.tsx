@@ -4,7 +4,7 @@ import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
 import type { OrgSlice } from "@/lib/types";
 
 const COLORS = {
-  indigo: "#6366f1",
+  indigo: "#1E90FF",
   slate: "#64748b",
   zinc: "#71717a",
 } as const;
@@ -27,7 +27,7 @@ export function OrgDistribution({ total, slices }: OrgDistributionProps) {
         <h2 className="text-xs font-semibold uppercase tracking-wide text-fg">
           Org Distribution
         </h2>
-        <p className="text-xl font-medium leading-6 text-[#6366f1] dark:text-accent">
+        <p className="text-xl font-medium leading-6 text-[#1E90FF] dark:text-accent">
           {total}
         </p>
       </div>

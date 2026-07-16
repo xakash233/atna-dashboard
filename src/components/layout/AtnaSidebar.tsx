@@ -136,22 +136,22 @@ function NavLink({
       className={cn(
         "group relative flex items-center gap-2.5 rounded-xl px-3 py-2 text-[12.5px] font-semibold transition-all duration-200",
         active
-          ? "bg-[#0f172a] text-white shadow-sm dark:bg-white dark:text-[#0f172a]"
-          : "text-[#475569] hover:translate-x-0.5 hover:bg-[#f1f5f9] hover:text-[#0f172a]",
+          ? "bg-white text-[#0f172a] shadow-sm dark:bg-[#1a1d27] dark:text-white"
+          : "text-[#475569] hover:translate-x-0.5 hover:bg-[#E8F4FF] hover:text-[#1E90FF]",
         collapsed && "justify-center px-2 hover:translate-x-0",
       )}
       aria-current={active ? "page" : undefined}
     >
       {active && (
-        <span className="absolute left-0 top-1/2 h-4 w-1 -translate-y-1/2 rounded-r-full bg-gradient-to-b from-[#6366f1] to-[#00d8a6]" />
+        <span className="absolute left-0 top-1/2 h-4 w-1 -translate-y-1/2 rounded-r-full bg-[#1E90FF]" />
       )}
       <NavIcon
         name={icon}
         className={cn(
           "transition-colors duration-200",
           active
-            ? "text-white dark:text-[#0f172a]"
-            : "text-[#94a3b8] group-hover:text-[#6366f1]",
+            ? "text-[#1E90FF] dark:text-[#1E90FF]"
+            : "text-[#94a3b8] group-hover:text-[#1E90FF]",
         )}
       />
       {!collapsed && <span className="truncate">{label}</span>}
@@ -183,7 +183,7 @@ export function AtnaSidebar() {
           sidebarCollapsed ? "justify-center px-2" : "gap-2.5 px-4",
         )}
       >
-        <div className="grid size-9 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-[#6366f1]/15 to-[#00d8a6]/15 ring-1 ring-[#e2e8f0] transition-transform duration-200 hover:scale-105">
+        <div className="grid size-9 shrink-0 place-items-center rounded-xl bg-[#1E90FF]/15 ring-1 ring-[#e2e8f0] transition-transform duration-200 hover:scale-105">
           <Image src="/assets/logo-hex.svg" alt="Atna" width={18} height={16} unoptimized />
         </div>
         {!sidebarCollapsed && (
@@ -248,31 +248,43 @@ export function AtnaSidebar() {
                 href="/hyre/resume-agent"
                 title="Intelli Hire"
                 className={cn(
-                  "group flex items-center justify-center rounded-xl px-2 py-2 transition-all duration-200",
+                  "group relative flex items-center justify-center rounded-xl px-2 py-2 transition-all duration-200",
                   hyreActive
-                    ? "bg-[#0f172a] text-white dark:bg-white dark:text-[#0f172a]"
-                    : "text-[#475569] hover:bg-[#f1f5f9] hover:text-[#6366f1]",
+                    ? "bg-white text-[#0f172a] shadow-sm dark:bg-[#1a1d27] dark:text-white"
+                    : "text-[#475569] hover:bg-[#E8F4FF] hover:text-[#1E90FF]",
                 )}
               >
-                <NavIcon name="hire" className="size-4" />
+                {hyreActive && (
+                  <span className="absolute left-0 top-1/2 h-4 w-1 -translate-y-1/2 rounded-r-full bg-[#1E90FF]" />
+                )}
+                <NavIcon
+                  name="hire"
+                  className={cn(
+                    "size-4",
+                    hyreActive ? "text-[#1E90FF]" : "text-[#94a3b8] group-hover:text-[#1E90FF]",
+                  )}
+                />
               </Link>
             ) : (
               <AnimatedButton
                 type="button"
                 onClick={() => setHyreOpen((o) => !o)}
                 className={cn(
-                  "group flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-[12.5px] font-semibold transition-all duration-200",
+                  "group relative flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-[12.5px] font-semibold transition-all duration-200",
                   hyreActive
-                    ? "bg-white text-[#0f172a] shadow-sm dark:bg-[#1a1d27]"
-                    : "text-[#475569] hover:bg-white hover:text-[#0f172a] dark:hover:bg-[#1a1d27]",
+                    ? "bg-white text-[#0f172a] shadow-sm dark:bg-[#1a1d27] dark:text-white"
+                    : "text-[#475569] hover:bg-[#E8F4FF] hover:text-[#1E90FF]",
                 )}
                 aria-expanded={hyreOpen}
               >
+                {hyreActive && (
+                  <span className="absolute left-0 top-1/2 h-4 w-1 -translate-y-1/2 rounded-r-full bg-[#1E90FF]" />
+                )}
                 <NavIcon
                   name="hire"
                   className={cn(
                     "size-4 shrink-0 transition-colors duration-200",
-                    hyreActive ? "text-[#6366f1]" : "text-[#94a3b8] group-hover:text-[#6366f1]",
+                    hyreActive ? "text-[#1E90FF]" : "text-[#94a3b8] group-hover:text-[#1E90FF]",
                   )}
                 />
                 <span className="flex-1 truncate">Intelli Hire</span>
@@ -300,20 +312,23 @@ export function AtnaSidebar() {
                         href={item.href}
                         title={item.label}
                         className={cn(
-                          "group flex items-center gap-2 rounded-xl px-3 py-2 text-[12px] font-medium transition-all duration-200",
+                          "group relative flex items-center gap-2 rounded-xl px-3 py-2 text-[12px] font-medium transition-all duration-200",
                           active
-                            ? "bg-[#0f172a] text-white shadow-sm dark:bg-white dark:text-[#0f172a]"
-                            : "text-[#64748b] hover:translate-x-0.5 hover:bg-white hover:text-[#0f172a] dark:hover:bg-[#1a1d27]",
+                            ? "bg-white text-[#0f172a] shadow-sm dark:bg-[#1a1d27] dark:text-white"
+                            : "text-[#64748b] hover:translate-x-0.5 hover:bg-[#E8F4FF] hover:text-[#1E90FF]",
                         )}
                         aria-current={active ? "page" : undefined}
                       >
+                        {active && (
+                          <span className="absolute left-0 top-1/2 h-4 w-1 -translate-y-1/2 rounded-r-full bg-[#1E90FF]" />
+                        )}
                         <NavIcon
                           name={item.icon}
                           className={cn(
                             "size-3.5 transition-colors duration-200",
                             active
-                              ? "text-white dark:text-[#0f172a]"
-                              : "text-[#94a3b8] group-hover:text-[#00d8a6]",
+                              ? "text-[#1E90FF]"
+                              : "text-[#94a3b8] group-hover:text-[#1E90FF]",
                           )}
                         />
                         <span className="truncate">{item.label}</span>
@@ -351,7 +366,7 @@ export function AtnaSidebar() {
               {(["teal", "indigo", "purple", "rose", "amber"] as const).map((color) => {
                 const bgClass = {
                   teal: "bg-[#0d9488]",
-                  indigo: "bg-[#6366f1]",
+                  indigo: "bg-[#1E90FF]",
                   purple: "bg-[#7c3aed]",
                   rose: "bg-[#e11d48]",
                   amber: "bg-[#d97706]",
@@ -377,7 +392,7 @@ export function AtnaSidebar() {
           <AnimatedButton
             type="button"
             onClick={() => setTheme(isDark ? "light" : "dark")}
-            className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-[11px] font-semibold text-[#64748b] transition-all duration-200 hover:bg-[#f1f5f9] hover:text-[#0f172a] dark:hover:bg-surface-muted"
+            className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-[11px] font-semibold text-[#64748b] transition-all duration-200 hover:bg-[#E8F4FF] hover:text-[#1E90FF] dark:hover:bg-surface-muted"
             aria-label="Toggle theme"
           >
             <span>{isDark ? "Light mode" : "Dark mode"}</span>
@@ -390,7 +405,7 @@ export function AtnaSidebar() {
         <AnimatedButton
           type="button"
           onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-          className="flex w-full items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-[11px] font-semibold text-[#64748b] transition-all duration-200 hover:bg-[#f1f5f9] hover:text-[#0f172a] dark:hover:bg-surface-muted"
+          className="flex w-full items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-[11px] font-semibold text-[#64748b] transition-all duration-200 hover:bg-[#E8F4FF] hover:text-[#1E90FF] dark:hover:bg-surface-muted"
           title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           {sidebarCollapsed ? (

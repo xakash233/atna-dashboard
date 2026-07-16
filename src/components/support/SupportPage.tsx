@@ -148,7 +148,7 @@ export function SupportPage() {
                   className={cn(
                     "rounded-xl px-4 py-2.5 text-sm font-medium transition",
                     active
-                      ? "bg-[#d8f0e8] text-[#1e293b] shadow-sm dark:bg-pastel-mint/30 dark:text-pastel-text"
+                      ? "bg-[#e8eaed] text-[#1e293b] shadow-sm dark:bg-white/10 dark:text-pastel-text"
                       : "bg-pastel-card text-pastel-muted hover:bg-[rgba(180,168,204,0.18)] hover:text-pastel-text",
                   )}
                 >

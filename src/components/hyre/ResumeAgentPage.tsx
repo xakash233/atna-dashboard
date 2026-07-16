@@ -85,7 +85,7 @@ export function ResumeAgentPage({ data }: { data: ResumeAgentData }) {
                 className={cn(
                   "rounded-xl px-4 py-2.5 text-sm font-medium transition",
                   tab === item.id
-                    ? "bg-[#d8f0e8] text-[#1e293b] dark:bg-pastel-mint/30 dark:text-pastel-text"
+                    ? "bg-[#e8eaed] text-[#1e293b] dark:bg-white/10 dark:text-pastel-text"
                     : "bg-pastel-card text-pastel-muted hover:text-pastel-text",
                 )}
               >

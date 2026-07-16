@@ -25,7 +25,6 @@ const METRICS = [
     delta: "+12.4%",
     direction: "up" as const,
     tone: "positive" as const,
-    color: "indigo" as const,
   },
   {
     label: "Safe signals found",
@@ -33,7 +32,6 @@ const METRICS = [
     delta: "+8.2%",
     direction: "up" as const,
     tone: "positive" as const,
-    color: "mint" as const,
   },
   {
     label: "Mid signals found",
@@ -41,7 +39,6 @@ const METRICS = [
     delta: "-3.1%",
     direction: "down" as const,
     tone: "negative" as const,
-    color: "amber" as const,
   },
   {
     label: "Risk signals found",
@@ -49,42 +46,161 @@ const METRICS = [
     delta: "+1.8%",
     direction: "up" as const,
     tone: "positive" as const,
-    color: "rose" as const,
   },
 ] as const;
+
+/** Classic sparkline profile — last bar = current % */
+function sparklineFromMetric(delta: string, direction: "up" | "down"): number[] {
+  const pct = Math.abs(parseFloat(delta.replace(/[%+]/g, ""))) || 0;
+  const MAX_PCT = 15;
+  const end = Math.max(28, Math.min(92, (pct / MAX_PCT) * 92));
+
+  const rising = [30, 45, 35, 60, 50, 75, 90];
+  const falling = [90, 75, 60, 50, 45, 35, 28];
+  const base = direction === "up" ? rising : falling;
+  const last = base[base.length - 1];
+
+  return base.map((v) => (v / last) * end);
+}
+
+/** Original thin-bar sparkline (initial metric card style) */
+function MiniTrendGraph({
+  values,
+  direction,
+  active,
+  hovered,
+}: {
+  values: number[];
+  direction: "up" | "down";
+  active: boolean;
+  hovered: boolean;
+  id?: string;
+}) {
+  const isUp = direction === "up";
+  const barColor = isUp ? "bg-[#00d8a6]" : "bg-[#ef4444]";
+  const glow = isUp ? "rgba(0,216,166,0.45)" : "rgba(239,68,68,0.45)";
+
+  return (
+    <div className="flex h-7 w-12 items-end gap-[3px]">
+      {values.map((v, i) => (
+        <div
+          key={i}
+          className={`w-[2.5px] origin-bottom rounded-[1px] transition-all ease-out ${barColor} ${
+            hovered ? "duration-300" : "duration-500"
+          }`}
+          style={{
+            height: active ? `${Math.max(16, v * 0.85)}%` : "12%",
+            transitionDelay: hovered ? `${i * 35}ms` : `${i * 25}ms`,
+            transform: hovered ? "scaleY(1.12)" : "scaleY(1)",
+            opacity: hovered ? 1 : 0.8,
+            boxShadow: hovered ? `0 0 5px ${glow}` : "none",
+          }}
+        />
+      ))}
+    </div>
+  );
+}
 
 const ACTIVITIES = [
   {
     title: "Tru-Doc look up completed",
     description: "Document look up processed successfully in US-East Node.",
-    kind: "success" as const,
+    icon: "document" as const,
   },
   {
     title: "API Credentials rotation",
     description: "System rotated access keys for global operations client.",
-    kind: "user" as const,
+    icon: "key" as const,
   },
   {
     title: "Tru-Doc look up completed",
     description: "Document look up processed successfully in EU-West Node.",
-    kind: "success" as const,
+    icon: "document" as const,
   },
   {
     title: "System parameters update",
     description: "Updated threshold configurations for email parser checks.",
-    kind: "user" as const,
+    icon: "settings" as const,
   },
   {
     title: "Tru-Doc look up completed",
     description: "Document look up processed successfully in AP-South Node.",
-    kind: "success" as const,
+    icon: "document" as const,
   },
   {
     title: "New user added",
     description: "santhoshatna@yopmail.com added to workspace dashboard.",
-    kind: "user" as const,
+    icon: "userPlus" as const,
   },
 ] as const;
+
+const ACTIVITY_ICON_STYLES = {
+  document: "bg-[#e6fbf7] text-[#00d8a6]",
+  key: "bg-[#fff7ed] text-[#ea580c]",
+  settings: "bg-[#f5f3ff] text-[#7c3aed]",
+  userPlus: "bg-[#fdf2f8] text-[#db2777]",
+} as const;
+
+function ActivityIcon({
+  type,
+  className,
+}: {
+  type: (typeof ACTIVITIES)[number]["icon"];
+  className?: string;
+}) {
+  const common = "size-3.5";
+  switch (type) {
+    case "document":
+      return (
+        <svg className={className ?? common} viewBox="0 0 20 20" fill="none" aria-hidden>
+          <path
+            d="M6 3.5h5.5L15 7v9.5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-12a1 1 0 0 1 1-1Z"
+            stroke="currentColor"
+            strokeWidth="1.4"
+            strokeLinejoin="round"
+          />
+          <path d="M11.5 3.5V7H15M7.5 10.5h5M7.5 13.5h3.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+        </svg>
+      );
+    case "key":
+      return (
+        <svg className={className ?? common} viewBox="0 0 20 20" fill="none" aria-hidden>
+          <circle cx="7.5" cy="10" r="3" stroke="currentColor" strokeWidth="1.4" />
+          <path
+            d="M10.2 10H16.5v2.2M14.2 10v2.2"
+            stroke="currentColor"
+            strokeWidth="1.4"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      );
+    case "settings":
+      return (
+        <svg className={className ?? common} viewBox="0 0 20 20" fill="none" aria-hidden>
+          <circle cx="10" cy="10" r="2.2" stroke="currentColor" strokeWidth="1.4" />
+          <path
+            d="M10 3.5v1.6M10 14.9v1.6M3.5 10h1.6M14.9 10h1.6M5.4 5.4l1.1 1.1M13.5 13.5l1.1 1.1M14.6 5.4l-1.1 1.1M6.5 13.5l-1.1 1.1"
+            stroke="currentColor"
+            strokeWidth="1.4"
+            strokeLinecap="round"
+          />
+        </svg>
+      );
+    case "userPlus":
+      return (
+        <svg className={className ?? common} viewBox="0 0 20 20" fill="none" aria-hidden>
+          <circle cx="8.5" cy="7" r="2.6" stroke="currentColor" strokeWidth="1.4" />
+          <path
+            d="M3.8 15.5c.9-2.4 8.5-2.4 9.4 0M14.2 7.2v4.2M12.1 9.3h4.2"
+            stroke="currentColor"
+            strokeWidth="1.4"
+            strokeLinecap="round"
+          />
+        </svg>
+      );
+  }
+}
 
 const RULES = [
   "When email_is_disposable is equal to true",
@@ -157,64 +273,6 @@ function TrendBadge({
   );
 }
 
-// Interactive mini-bar sparkline for metrics cards — compact size, simple hover
-function Sparkline({
-  color,
-  active,
-  hovered,
-}: {
-  color: "indigo" | "mint" | "amber" | "rose";
-  active: boolean;
-  hovered: boolean;
-}) {
-  const values =
-    color === "indigo"
-      ? [30, 45, 35, 60, 50, 75, 90]
-      : color === "mint"
-        ? [40, 30, 55, 45, 65, 80, 85]
-        : color === "amber"
-          ? [60, 50, 40, 35, 30, 45, 25]
-          : [20, 30, 25, 40, 35, 50, 45];
-
-  const barColor =
-    color === "indigo"
-      ? "bg-[#6366f1]"
-      : color === "mint"
-        ? "bg-[#00d8a6]"
-        : color === "amber"
-          ? "bg-[#d97706]"
-          : "bg-[#ef4444]";
-
-  const glow =
-    color === "indigo"
-      ? "rgba(99,102,241,0.4)"
-      : color === "mint"
-        ? "rgba(0,216,166,0.4)"
-        : color === "amber"
-          ? "rgba(217,119,6,0.4)"
-          : "rgba(239,68,68,0.4)";
-
-  return (
-    <div className="flex h-7 w-12 items-end gap-[3px]">
-      {values.map((v, i) => (
-        <div
-          key={i}
-          className={`w-[2.5px] origin-bottom rounded-[1px] transition-all ease-out ${barColor} ${
-            hovered ? "duration-300" : "duration-500"
-          }`}
-          style={{
-            height: active ? `${Math.max(16, v * 0.85)}%` : "12%",
-            transitionDelay: hovered ? `${i * 35}ms` : `${i * 25}ms`,
-            transform: hovered ? "scaleY(1.12)" : "scaleY(1)",
-            opacity: hovered ? 1 : 0.8,
-            boxShadow: hovered ? `0 0 5px ${glow}` : "none",
-          }}
-        />
-      ))}
-    </div>
-  );
-}
-
 function CloseIcon({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 20 20" fill="none" aria-hidden>
@@ -229,8 +287,6 @@ function CloseIcon({ className }: { className?: string }) {
 }
 
 export function LookupDashboard() {
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [isHovered, setIsHovered] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [showLookupPromo, setShowLookupPromo] = useState(true);
   const [hoveredLookupBtn, setHoveredLookupBtn] = useState<"single" | "bulk" | null>(null);
@@ -248,13 +304,6 @@ export function LookupDashboard() {
 
   const dismissLookupPromo = () => {
     setShowLookupPromo(false);
-  };
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    setMousePos({ x, y });
   };
 
   // Safe: 73%, Mid: 17%, Risk: 10%
@@ -277,7 +326,7 @@ export function LookupDashboard() {
           </div>
           <AnimatedButton
             type="button"
-            className="inline-flex items-center gap-2 self-start rounded-full border border-[#e2e8f0] bg-white px-5 py-2.5 text-[10px] font-semibold text-[#0f172a] shadow-sm hover:bg-[#f8fafc] active:scale-95 transition-all duration-200"
+            className="inline-flex items-center gap-2 self-start rounded-full border border-[#e2e8f0] bg-white px-5 py-2.5 text-[10px] font-semibold text-[#0f172a] shadow-sm hover:bg-[#E8F4FF] active:scale-95 transition-all duration-200"
           >
             <CalendarIcon className="size-4 text-[#475569]" />
             Current month
@@ -296,10 +345,7 @@ export function LookupDashboard() {
             className="overflow-hidden"
           >
             <section
-              onMouseMove={handleMouseMove}
-              onMouseEnter={() => setIsHovered(true)}
-              onMouseLeave={() => setIsHovered(false)}
-              className="relative overflow-hidden rounded-2xl border border-[#e2e8f0] bg-white p-5 shadow-[0_1px_3px_rgba(0,0,0,0.01),0_10px_20px_rgba(0,0,0,0.02)] transition-all duration-300 hover:border-[#00d8a6] hover:shadow-[0_4px_12px_rgba(0,0,0,0.03),0_12px_24px_rgba(0,0,0,0.02)] sm:p-6"
+              className="relative overflow-hidden rounded-2xl border border-[#e2e8f0] bg-white p-5 shadow-[0_1px_3px_rgba(0,0,0,0.01),0_10px_20px_rgba(0,0,0,0.02)] sm:p-6"
               role="dialog"
               aria-label="Start your digital look up"
             >
@@ -308,7 +354,7 @@ export function LookupDashboard() {
                 type="button"
                 onClick={dismissLookupPromo}
                 aria-label="Close look up promo"
-                className="absolute right-3 top-3 z-20 grid size-8 place-items-center rounded-full border border-[#e2e8f0] bg-white text-[#64748b] shadow-sm transition-all duration-200 hover:scale-105 hover:border-[#00d8a6] hover:text-[#0f172a] active:scale-95"
+                className="absolute right-3 top-3 z-20 grid size-8 place-items-center rounded-full border border-[#e2e8f0] bg-white text-[#64748b] shadow-sm transition-all duration-200 hover:scale-105 hover:border-[#1E90FF]/40 hover:bg-[#E8F4FF] hover:text-[#1E90FF] active:scale-95"
               >
                 <CloseIcon className="size-3.5" />
               </button>
@@ -316,22 +362,13 @@ export function LookupDashboard() {
               {/* Interactive minimalist dot grid background */}
               <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] opacity-60 [background-size:16px_16px]" />
 
-              {/* Interactive mouse follow spotlight with Atna brand neon color */}
-              <div
-                className="pointer-events-none absolute inset-0 transition-opacity duration-300"
-                style={{
-                  opacity: isHovered ? 1 : 0,
-                  background: `radial-gradient(circle 140px at ${mousePos.x}px ${mousePos.y}px, rgba(0, 216, 166, 0.12), transparent 80%)`,
-                }}
-              />
-
               <div className="relative z-10 max-w-2xl pr-8">
                 <h2 className="font-sans text-lg font-semibold tracking-wide text-[#0f172a] sm:text-xl">
                   Start your digital look up
                 </h2>
                 <p className="mt-2 text-[11px] font-medium leading-relaxed text-[#475569]">
                   Simplify bulk queries or execute precision individual audits.{" "}
-                  <span className="cursor-pointer font-semibold text-[#475569] underline-offset-2 transition-colors hover:text-[#00d8a6] hover:underline">
+                  <span className="cursor-pointer font-semibold text-[#475569] underline-offset-2 transition-colors hover:text-[#1E90FF] hover:underline">
                     Click here
                   </span>{" "}
                   to download the spreadsheet template for bulk upload.
@@ -342,7 +379,7 @@ export function LookupDashboard() {
                     const singleIsPrimary = hoveredLookupBtn !== "bulk";
                     const bulkIsPrimary = hoveredLookupBtn === "bulk";
                     const primaryClass =
-                      "overflow-hidden border-0 bg-gradient-to-r from-[#6366f1] to-[#00d8a6] text-white shadow-md [background-clip:padding-box]";
+                      "overflow-hidden border-0 bg-[#1E90FF] text-white shadow-md";
                     const outlineClass =
                       "overflow-hidden border border-[#e2e8f0] bg-white text-[#0f172a] shadow-sm";
 
@@ -395,11 +432,9 @@ export function LookupDashboard() {
       <FadeIn delay={0.08}>
         <Stagger className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
           {METRICS.map((m, index) => {
-            const cardTheme = 
-              m.color === "indigo" ? "hover:border-[#6366f1]/50 hover:shadow-[0_12px_24px_rgba(99,102,241,0.08),0_4px_12px_rgba(99,102,241,0.04)] hover:bg-gradient-to-b hover:from-white hover:to-[#eeeffe]/15" :
-              m.color === "mint" ? "hover:border-[#00d8a6]/50 hover:shadow-[0_12px_24px_rgba(0,216,166,0.08),0_4px_12px_rgba(0,216,166,0.04)] hover:bg-gradient-to-b hover:from-white hover:to-[#e6fbf7]/15" :
-              m.color === "amber" ? "hover:border-[#d97706]/50 hover:shadow-[0_12px_24px_rgba(217,119,6,0.08),0_4px_12px_rgba(217,119,6,0.04)] hover:bg-gradient-to-b hover:from-white hover:to-[#fffbeb]/15" :
-              "hover:border-[#ef4444]/50 hover:shadow-[0_12px_24px_rgba(239,68,68,0.08),0_4px_12px_rgba(239,68,68,0.04)] hover:bg-gradient-to-b hover:from-white hover:to-[#fee2e2]/15";
+            const cardTheme =
+              "hover:border-[#1E90FF]/40 hover:shadow-[0_12px_24px_rgba(30,144,255,0.16),0_4px_12px_rgba(30,144,255,0.08)] hover:bg-gradient-to-b hover:from-white hover:to-[#E8F4FF]/50";
+            const sparkValues = sparklineFromMetric(m.delta, m.direction);
 
             return (
               <StaggerItem key={m.label}>
@@ -414,14 +449,19 @@ export function LookupDashboard() {
                       hoveredCard === index ? "opacity-100" : ""
                     }`}
                   />
-                  {/* Atna Brand Gradient Highlight */}
-                  <div className="absolute bottom-0 left-0 right-0 h-1 origin-left scale-x-0 bg-gradient-to-r from-[#6366f1] to-[#00d8a6] transition-transform duration-500 ease-out group-hover:scale-x-100" />
+                  <div className="absolute bottom-0 left-0 right-0 h-1 origin-left scale-x-0 bg-[#1E90FF] transition-transform duration-500 ease-out group-hover:scale-x-100" />
 
                   <div className="relative z-10 flex items-start justify-between gap-3">
-                    <p className="text-[10px] font-semibold uppercase tracking-wider text-[#475569] transition-colors duration-300 group-hover:text-[#0f172a]">
+                    <p className="text-[10px] font-semibold uppercase tracking-wider text-[#475569] transition-colors duration-300 group-hover:text-[#1E90FF]">
                       {m.label}
                     </p>
-                    <Sparkline color={m.color} active={mounted} hovered={hoveredCard === index} />
+                    <MiniTrendGraph
+                      id={`metric-${index}`}
+                      values={sparkValues}
+                      direction={m.direction}
+                      active={mounted}
+                      hovered={hoveredCard === index}
+                    />
                   </div>
                   <div className="relative z-10 mt-2.5 flex items-center gap-2">
                     <p className="font-sans text-[20px] font-semibold leading-none tracking-normal text-[#0f172a] sm:text-[22px]">
@@ -431,7 +471,7 @@ export function LookupDashboard() {
                       <TrendBadge delta={m.delta} direction={m.direction} tone={m.tone} />
                     </span>
                   </div>
-                  <p className="relative z-10 mt-2 text-[8px] font-medium uppercase tracking-wider text-[#475569] transition-colors duration-300 group-hover:text-[#64748b]">
+                  <p className="relative z-10 mt-2 text-[8px] font-medium uppercase tracking-wider text-[#475569] transition-colors duration-300 group-hover:text-[#1E90FF]">
                     Compared to last month
                   </p>
                 </article>
@@ -445,7 +485,7 @@ export function LookupDashboard() {
         <div className="flex flex-col gap-3">
           {/* Row 1: Look up by Region & Recent activities */}
           <div className="grid grid-cols-1 gap-3 xl:grid-cols-12">
-            <article className="xl:col-span-8 flex h-full min-h-[340px] flex-col rounded-2xl border border-[#e2e8f0] bg-white p-4 sm:p-5 shadow-[0_1px_3px_rgba(0,0,0,0.01),0_8px_16px_rgba(0,0,0,0.01)] hover:-translate-y-0.5 hover:border-[#6366f1] hover:shadow-[0_4px_12px_rgba(0,0,0,0.03),0_12px_24px_rgba(0,0,0,0.02)] transition-all duration-300">
+            <article className="xl:col-span-8 flex h-full min-h-[340px] flex-col rounded-2xl border border-[#e2e8f0] bg-white p-4 sm:p-5 shadow-[0_1px_3px_rgba(0,0,0,0.01),0_8px_16px_rgba(0,0,0,0.01)] hover:-translate-y-0.5 hover:border-[#1E90FF]/40 hover:shadow-[0_4px_12px_rgba(30,144,255,0.18),0_12px_24px_rgba(30,144,255,0.08)] transition-all duration-300">
               <div className="mb-2.5 flex shrink-0 items-center justify-between">
                 <h3 className="text-[10px] font-semibold tracking-wider text-[#0f172a] uppercase">Look up by region</h3>
                 <span className="text-[8px] text-[#475569] font-semibold uppercase tracking-widest">Real-Time Geo Map</span>
@@ -455,43 +495,20 @@ export function LookupDashboard() {
               </div>
             </article>
 
-            <article className="xl:col-span-4 flex h-full min-h-[340px] flex-col rounded-2xl border border-[#e2e8f0] bg-white p-4 sm:p-5 shadow-[0_1px_3px_rgba(0,0,0,0.01),0_8px_16px_rgba(0,0,0,0.01)] hover:-translate-y-0.5 hover:border-[#6366f1] hover:shadow-[0_4px_12px_rgba(0,0,0,0.03),0_12px_24px_rgba(0,0,0,0.02)] transition-all duration-300">
+            <article className="xl:col-span-4 flex h-full min-h-[340px] flex-col rounded-2xl border border-[#e2e8f0] bg-white p-4 sm:p-5 shadow-[0_1px_3px_rgba(0,0,0,0.01),0_8px_16px_rgba(0,0,0,0.01)] hover:-translate-y-0.5 hover:border-[#1E90FF]/40 hover:shadow-[0_4px_12px_rgba(30,144,255,0.18),0_12px_24px_rgba(30,144,255,0.08)] transition-all duration-300">
               <h3 className="mb-2.5 shrink-0 text-[10px] font-semibold tracking-wider text-[#0f172a] uppercase">Recent activities</h3>
               <div className="relative flex min-h-0 flex-1 flex-col justify-between gap-2 before:absolute before:bottom-2 before:left-3 before:top-2 before:w-0.5 before:bg-[#f1f5f9]">
                 {ACTIVITIES.map((a, i) => {
-                  const kindColor =
-                    a.kind === "success"
-                      ? "bg-[#e6fbf7] text-[#00d8a6] border-[#e2e8f0] group-hover:border-[#00d8a6] group-hover:scale-110"
-                      : "bg-[#eeeffe] text-[#6366f1] border-[#e2e8f0] group-hover:border-[#6366f1] group-hover:scale-110";
+                  const iconStyle = ACTIVITY_ICON_STYLES[a.icon];
                   return (
                     <div
                       key={`${a.title}-${i}`}
                       className="group relative z-10 flex flex-1 items-center gap-3 list-none cursor-pointer transition-transform duration-300 hover:translate-x-1.5"
                     >
                       <span
-                        className={`grid size-7 shrink-0 place-items-center rounded-full border transition-all duration-300 ${kindColor}`}
+                        className={`grid size-7 shrink-0 place-items-center rounded-full border border-[#e2e8f0] transition-all duration-300 group-hover:border-[#1E90FF]/40 group-hover:scale-110 ${iconStyle}`}
                       >
-                        {a.kind === "success" ? (
-                          <svg className="size-4" viewBox="0 0 20 20" fill="none" aria-hidden>
-                            <path
-                              d="M5 10.5 8.5 14 15 6.5"
-                              stroke="currentColor"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        ) : (
-                          <svg className="size-4" viewBox="0 0 20 20" fill="none" aria-hidden>
-                            <circle cx="10" cy="7" r="3" stroke="currentColor" strokeWidth="1.5" />
-                            <path
-                              d="M4.5 16.5c1.5-3 9.5-3 11 0"
-                              stroke="currentColor"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                            />
-                          </svg>
-                        )}
+                        <ActivityIcon type={a.icon} />
                       </span>
                       <div>
                         <p className="text-[10px] font-semibold text-[#0f172a] transition-colors group-hover:text-black">
@@ -511,7 +528,7 @@ export function LookupDashboard() {
           {/* Row 2: Monthly Volume Chart & Signal Distribution Donut */}
           <div className="grid grid-cols-1 gap-3 xl:grid-cols-12">
             {/* Monthly Volume & Signals Bar Chart */}
-            <article className="relative xl:col-span-8 flex h-full min-h-[300px] flex-col rounded-2xl border border-[#e2e8f0] bg-white p-4 sm:p-5 shadow-[0_1px_3px_rgba(0,0,0,0.01),0_8px_16px_rgba(0,0,0,0.01)] hover:-translate-y-0.5 hover:border-[#6366f1] hover:shadow-[0_4px_12px_rgba(0,0,0,0.03),0_12px_24px_rgba(0,0,0,0.02)] transition-all duration-300">
+            <article className="relative xl:col-span-8 flex h-full min-h-[300px] flex-col rounded-2xl border border-[#e2e8f0] bg-white p-4 sm:p-5 shadow-[0_1px_3px_rgba(0,0,0,0.01),0_8px_16px_rgba(0,0,0,0.01)] hover:-translate-y-0.5 hover:border-[#1E90FF]/40 hover:shadow-[0_4px_12px_rgba(30,144,255,0.18),0_12px_24px_rgba(30,144,255,0.08)] transition-all duration-300">
               <div className="mb-2.5 flex shrink-0 items-center justify-between">
                 <div>
                   <h3 className="text-[10px] font-semibold tracking-wider text-[#0f172a] uppercase">Monthly look up volume</h3>
@@ -519,7 +536,7 @@ export function LookupDashboard() {
                 </div>
                 <div className="flex items-center gap-3 text-[8px] font-semibold uppercase text-[#475569]">
                   <div className="flex items-center gap-1.5">
-                    <span className="size-2 rounded-full bg-[#6366f1]" />
+                    <span className="size-2 rounded-full bg-[#1E90FF]" />
                     <span>Total Vol</span>
                   </div>
                   <div className="flex items-center gap-1.5">
@@ -545,10 +562,10 @@ export function LookupDashboard() {
                     >
                       <div className="flex w-full grow items-end justify-center gap-1.5">
                         <div
-                          className="relative w-4 overflow-hidden rounded-t bg-[#6366f1]/20 transition-all duration-700 ease-out group-hover/bar:bg-[#6366f1]/35 sm:w-5"
+                          className="relative w-4 overflow-hidden rounded-t bg-[#1E90FF]/20 transition-all duration-700 ease-out group-hover/bar:bg-[#1E90FF]/35 sm:w-5"
                           style={{ height: mounted ? `${totalHeight}%` : "0%" }}
                         >
-                          <div className="absolute inset-x-0 bottom-0 top-1/2 bg-gradient-to-t from-[#6366f1]/40 to-transparent" />
+                          <div className="absolute inset-x-0 bottom-0 top-1/2 bg-gradient-to-t from-[#1E90FF]/40 to-transparent" />
                         </div>
                         <div
                           className="w-4 rounded-t bg-[#00d8a6] transition-all duration-700 ease-out group-hover/bar:bg-[#00f5d4] sm:w-5"
@@ -577,7 +594,7 @@ export function LookupDashboard() {
                       bottom: "55%",
                     }}
                   >
-                    <p className="text-[8px] font-semibold uppercase tracking-wider text-[#00d8a6]">
+                    <p className="text-[8px] font-semibold uppercase tracking-wider text-[#1E90FF]">
                       {MONTHLY_DATA[hoveredMonth].month} Audit
                     </p>
                     <p className="mt-1 font-medium text-slate-300">
@@ -598,7 +615,7 @@ export function LookupDashboard() {
             </article>
 
             {/* Signal Distribution Donut Chart */}
-            <article className="xl:col-span-4 flex h-full min-h-[300px] flex-col rounded-2xl border border-[#e2e8f0] bg-white p-4 sm:p-5 shadow-[0_1px_3px_rgba(0,0,0,0.01),0_8px_16px_rgba(0,0,0,0.01)] hover:-translate-y-0.5 hover:border-[#6366f1] hover:shadow-[0_4px_12px_rgba(0,0,0,0.03),0_12px_24px_rgba(0,0,0,0.02)] transition-all duration-300">
+            <article className="xl:col-span-4 flex h-full min-h-[300px] flex-col rounded-2xl border border-[#e2e8f0] bg-white p-4 sm:p-5 shadow-[0_1px_3px_rgba(0,0,0,0.01),0_8px_16px_rgba(0,0,0,0.01)] hover:-translate-y-0.5 hover:border-[#1E90FF]/40 hover:shadow-[0_4px_12px_rgba(30,144,255,0.18),0_12px_24px_rgba(30,144,255,0.08)] transition-all duration-300">
               <div className="shrink-0">
                 <h3 className="text-[10px] font-semibold tracking-wider text-[#0f172a] uppercase">Signal distribution</h3>
                 <p className="mt-0.5 text-[8px] font-medium text-[#475569]">
@@ -790,25 +807,25 @@ export function LookupDashboard() {
 
           {/* Row 3: Look up by type, Look up by Branch, Rules list */}
           <div className="grid grid-cols-1 gap-3 md:grid-cols-3 md:min-h-[280px]">
-            <article className="flex h-full flex-col rounded-2xl border border-[#e2e8f0] bg-white p-4 sm:p-5 shadow-[0_1px_3px_rgba(0,0,0,0.01),0_8px_16px_rgba(0,0,0,0.01)] hover:-translate-y-0.5 hover:border-[#00d8a6] hover:shadow-[0_4px_12px_rgba(0,0,0,0.03),0_12px_24px_rgba(0,0,0,0.02)] transition-all duration-300">
+            <article className="flex h-full flex-col rounded-2xl border border-[#e2e8f0] bg-white p-4 sm:p-5 shadow-[0_1px_3px_rgba(0,0,0,0.01),0_8px_16px_rgba(0,0,0,0.01)] hover:-translate-y-0.5 hover:border-[#1E90FF]/40 hover:shadow-[0_4px_12px_rgba(30,144,255,0.18),0_12px_24px_rgba(30,144,255,0.08)] transition-all duration-300">
               <h3 className="mb-2.5 shrink-0 text-[10px] font-semibold tracking-wider text-[#0f172a] uppercase">
                 Look up by type
               </h3>
               <div className="flex min-h-0 flex-1 flex-col justify-between gap-3">
                 <div className="flex flex-1 flex-col justify-evenly gap-2">
-                  <div className="group flex flex-1 items-center gap-2.5 rounded-xl border border-[#e2e8f0] border-l-4 border-l-[#6366f1] bg-[#f8fafc] px-3 py-3 shadow-sm transition-all duration-300 hover:scale-[1.01] hover:border-[#6366f1]">
-                    <span className="grid size-8 place-items-center rounded-full bg-white text-[#6366f1] transition-transform duration-300 group-hover:scale-110">
+                  <div className="group flex flex-1 items-center gap-2.5 rounded-xl border border-[#e2e8f0] border-l-4 border-l-transparent bg-[#f8fafc] px-3 py-3 shadow-sm transition-all duration-300 hover:scale-[1.01] hover:border-[#1E90FF]/40 hover:border-l-[#1E90FF] hover:bg-[#E8F4FF]">
+                    <span className="grid size-8 place-items-center rounded-full bg-white text-[#1E90FF] transition-transform duration-300 group-hover:scale-110">
                       <svg className="size-4" viewBox="0 0 20 20" fill="none" aria-hidden>
                         <rect x="3" y="5" width="14" height="10" rx="2" stroke="currentColor" strokeWidth="1.5" />
                         <path d="m3.5 6.5 6.5 5 6.5-5" stroke="currentColor" strokeWidth="1.5" />
                       </svg>
                     </span>
                     <p className="text-[10px] font-semibold text-[#0f172a]">
-                      Email has <span className="font-semibold text-[#6366f1]">811</span> look ups
+                      Email has <span className="font-semibold text-[#1E90FF]">811</span> look ups
                     </p>
                   </div>
-                  <div className="group flex flex-1 items-center gap-2.5 rounded-xl border border-[#e2e8f0] border-l-4 border-l-[#00d8a6] bg-[#f8fafc] px-3 py-3 shadow-sm transition-all duration-300 hover:scale-[1.01] hover:border-[#00d8a6]">
-                    <span className="grid size-8 place-items-center rounded-full bg-white text-[#00d8a6] transition-transform duration-300 group-hover:scale-110">
+                  <div className="group flex flex-1 items-center gap-2.5 rounded-xl border border-[#e2e8f0] border-l-4 border-l-transparent bg-[#f8fafc] px-3 py-3 shadow-sm transition-all duration-300 hover:scale-[1.01] hover:border-[#1E90FF]/40 hover:border-l-[#1E90FF] hover:bg-[#E8F4FF]">
+                    <span className="grid size-8 place-items-center rounded-full bg-white text-[#1E90FF] transition-transform duration-300 group-hover:scale-110">
                       <svg className="size-4" viewBox="0 0 20 20" fill="none" aria-hidden>
                         <path
                           d="M6.5 3.5h2l1 4-2 1.5a10 10 0 0 0 4.5 4.5l1.5-2 4 1v2a2 2 0 0 1-2 2A12.5 12.5 0 0 1 4.5 5.5a2 2 0 0 1 2-2Z"
@@ -819,7 +836,7 @@ export function LookupDashboard() {
                       </svg>
                     </span>
                     <p className="text-[10px] font-semibold text-[#0f172a]">
-                      Phone has <span className="font-semibold text-[#00d8a6]">437</span> look ups
+                      Phone has <span className="font-semibold text-[#1E90FF]">437</span> look ups
                     </p>
                   </div>
                 </div>
@@ -831,11 +848,11 @@ export function LookupDashboard() {
                   </div>
                   <div className="flex h-1.5 w-full overflow-hidden rounded-full bg-[#e2e8f0]">
                     <div
-                      className="h-full bg-gradient-to-r from-[#6366f1] to-[#4f46e5] transition-all duration-1000 ease-out"
+                      className="h-full bg-[#1E90FF] transition-all duration-1000 ease-out"
                       style={{ width: mounted ? "65%" : "0%" }}
                     />
                     <div
-                      className="h-full bg-gradient-to-r from-[#4f46e5] to-[#00d8a6] transition-all duration-1000 ease-out"
+                      className="h-full bg-[#94a3b8] transition-all duration-1000 ease-out"
                       style={{ width: mounted ? "35%" : "0%" }}
                     />
                   </div>
@@ -843,7 +860,7 @@ export function LookupDashboard() {
               </div>
             </article>
 
-            <article className="flex h-full flex-col rounded-2xl border border-[#e2e8f0] bg-white p-4 sm:p-5 shadow-[0_1px_3px_rgba(0,0,0,0.01),0_8px_16px_rgba(0,0,0,0.01)] hover:-translate-y-0.5 hover:border-[#00d8a6] hover:shadow-[0_4px_12px_rgba(0,0,0,0.03),0_12px_24px_rgba(0,0,0,0.02)] transition-all duration-300">
+            <article className="flex h-full flex-col rounded-2xl border border-[#e2e8f0] bg-white p-4 sm:p-5 shadow-[0_1px_3px_rgba(0,0,0,0.01),0_8px_16px_rgba(0,0,0,0.01)] hover:-translate-y-0.5 hover:border-[#1E90FF]/40 hover:shadow-[0_4px_12px_rgba(30,144,255,0.18),0_12px_24px_rgba(30,144,255,0.08)] transition-all duration-300">
               <h3 className="mb-2.5 shrink-0 text-[10px] font-semibold tracking-wider text-[#0f172a] uppercase">
                 Look up by Branch
               </h3>
@@ -863,7 +880,7 @@ export function LookupDashboard() {
                       </div>
                       <div className="h-1.5 w-full overflow-hidden rounded-full bg-[#f1f5f9]">
                         <div
-                          className="h-full rounded-full bg-gradient-to-r from-[#6366f1] to-[#00d8a6] transition-all duration-1000 ease-out"
+                          className="h-full rounded-full bg-[#1E90FF] transition-all duration-1000 ease-out"
                           style={{
                             width: mounted ? `${Math.min(branch.count * 1.1, 100)}%` : "0%",
                           }}
@@ -875,7 +892,7 @@ export function LookupDashboard() {
               </div>
             </article>
 
-            <article className="flex h-full flex-col rounded-2xl border border-[#e2e8f0] bg-white p-4 sm:p-5 shadow-[0_1px_3px_rgba(0,0,0,0.01),0_8px_16px_rgba(0,0,0,0.01)] hover:-translate-y-0.5 hover:border-[#00d8a6] hover:shadow-[0_4px_12px_rgba(0,0,0,0.03),0_12px_24px_rgba(0,0,0,0.02)] transition-all duration-300">
+            <article className="flex h-full flex-col rounded-2xl border border-[#e2e8f0] bg-white p-4 sm:p-5 shadow-[0_1px_3px_rgba(0,0,0,0.01),0_8px_16px_rgba(0,0,0,0.01)] hover:-translate-y-0.5 hover:border-[#1E90FF]/40 hover:shadow-[0_4px_12px_rgba(30,144,255,0.18),0_12px_24px_rgba(30,144,255,0.08)] transition-all duration-300">
               <h3 className="mb-2.5 shrink-0 text-[10px] font-semibold tracking-wider text-[#0f172a] uppercase">
                 Rules list
               </h3>
@@ -883,12 +900,12 @@ export function LookupDashboard() {
                 {RULES.map((rule, i) => (
                   <div
                     key={`${rule}-${i}`}
-                    className="group flex flex-1 cursor-pointer list-none items-center justify-between gap-3 rounded-xl border border-[#e2e8f0] bg-[#f8fafc] px-3 py-2 transition-all duration-300 hover:translate-x-1.5 hover:border-[#00d8a6] hover:bg-white"
+                    className="group flex flex-1 cursor-pointer list-none items-center justify-between gap-3 rounded-xl border border-[#e2e8f0] bg-[#f8fafc] px-3 py-2 transition-all duration-300 hover:translate-x-1.5 hover:border-[#1E90FF]/40 hover:bg-[#E8F4FF]"
                   >
-                    <p className="truncate text-[10px] font-semibold text-[#475569] transition-colors group-hover:text-[#0f172a]">
+                    <p className="truncate text-[10px] font-semibold text-[#475569] transition-colors group-hover:text-[#1E90FF]">
                       {rule}
                     </p>
-                    <span className="shrink-0 text-[10px] font-semibold text-[#475569] transition-transform duration-300 group-hover:translate-x-0.5 group-hover:text-[#00d8a6]">
+                    <span className="shrink-0 text-[10px] font-semibold text-[#475569] transition-transform duration-300 group-hover:translate-x-0.5 group-hover:text-[#1E90FF]">
                       ↓
                     </span>
                   </div>

@@ -4,23 +4,25 @@
 
 /* Atna Brand landing page theme alignment */
 :root {
-  --pastel-bg: #f8fafc;
-  --pastel-canvas: #f1f5f9;
+  --pastel-bg: #f4f5f7;
+  --pastel-canvas: #eceef2;
   --pastel-card: #ffffff;
   --pastel-text: #0f172a;
   --pastel-muted: #475569;
   --pastel-lavender: #e2e8f0;
-  --pastel-lavender-deep: #4f46e5;
+  --pastel-lavender-deep: #1e90ff;
   --pastel-sidebar: #ffffff;
-  --pastel-sidebar-deep: #4f46e5;
+  --pastel-sidebar-deep: #1e90ff;
   --pastel-blue: #38bdf8;
   --pastel-mint: #00d8a6;
   --pastel-peach: #ffedd5;
   --pastel-rose: #fee2e2;
   --pastel-coral: #fecaca;
-  --pastel-lilac: #e0e7ff;
+  --pastel-lilac: #e8f4ff;
   --pastel-cream: #fef3c7;
-  --pastel-sky: #e8f0f5;
+  --pastel-sky: #e8eaed;
+  --pastel-silver: #e8eaed;
+  --pastel-silver-bright: #f4f5f7;
   --pastel-shadow: 0 4px 12px -4px rgba(15, 23, 42, 0.04);
   --pastel-shadow-soft: 0 1px 3px -1px rgba(15, 23, 42, 0.02);
 
@@ -28,38 +30,38 @@
   --sidebar-fg: #0f172a;
   --sidebar-muted: #475569;
   --sidebar-border: #e2e8f0;
-  --sidebar-hover: #f8fafc;
+  --sidebar-hover: #eef0f3;
   --sidebar-active: #0f172a;
-  --sidebar-accent: #4f46e5;
+  --sidebar-accent: #1e90ff;
   --sidebar-width: 220px;
 
-  --bg: #f8fafc;
+  --bg: #f4f5f7;
   --bg-nav: #ffffff;
   --surface: #ffffff;
   --surface-solid: #ffffff;
-  --surface-muted: #f8fafc;
+  --surface-muted: #f4f5f7;
   --surface-elevated: #ffffff;
-  --surface-hover: #f1f5f9;
+  --surface-hover: #e8eaed;
   --border: #e2e8f0;
   --border-subtle: #f3f4f6;
   --border-strong: #d1d5db;
   --text: #111827;
   --text-muted: #6b7280;
-  --accent: #1e75ff;
+  --accent: #1e90ff;
   --accent-fg: #ffffff;
   --accent-soft: #eff6ff;
-  --accent-active-text: #1d4ed8;
-  --accent-rgb: 30, 117, 255;
+  --accent-active-text: #1873cc;
+  --accent-rgb: 30, 144, 255;
   --brand: #111827;
   --critical: #ef4444;
   --elevated: #f59e0b;
   --standard: #10b981;
-  --overlay: rgba(17, 24, 39, 0.04);
+  --overlay: rgba(148, 163, 184, 0.14);
   --card-inset: none;
   --sidebar-shadow: 1px 0 0 #e5e7eb;
   --bg-pattern-opacity: 0;
   --scrollbar: #d1d5db;
-  --glow-accent: rgba(30, 117, 255, 0.2);
+  --glow-accent: rgba(30, 144, 255, 0.2);
   --glow-standard: rgba(16, 185, 129, 0.15);
   --card-hover-shadow: 0 12px 32px -12px rgba(17, 24, 39, 0.14);
   --bolt-positive-bg: #e6f7f4;
@@ -79,16 +81,16 @@
   --pastel-text: #f3f4f6;
   --pastel-muted: #9ca3af;
   --pastel-lavender: #1e3a8a;
-  --pastel-lavender-deep: #3b82f6;
+  --pastel-lavender-deep: #1e90ff;
   --pastel-sidebar: #151821;
-  --pastel-sidebar-deep: #3b82f6;
+  --pastel-sidebar-deep: #1e90ff;
   --sidebar-bg: #151821;
   --sidebar-fg: #d1d5db;
   --sidebar-muted: #6b7280;
   --sidebar-border: rgba(255, 255, 255, 0.08);
   --sidebar-hover: rgba(255, 255, 255, 0.05);
   --sidebar-active: #f3f4f6;
-  --sidebar-accent: #3b82f6;
+  --sidebar-accent: #1e90ff;
   --bg: #0f1117;
   --bg-nav: #151821;
   --surface: #1a1d27;
@@ -101,11 +103,11 @@
   --border-strong: rgba(255, 255, 255, 0.12);
   --text: #f3f4f6;
   --text-muted: #9ca3af;
-  --accent: #3b82f6;
+  --accent: #1e90ff;
   --accent-fg: #ffffff;
-  --accent-soft: rgba(59, 130, 246, 0.15);
-  --accent-active-text: #93c5fd;
-  --accent-rgb: 59, 130, 246;
+  --accent-soft: rgba(30, 144, 255, 0.15);
+  --accent-active-text: #7ec8ff;
+  --accent-rgb: 30, 144, 255;
   --brand: #f3f4f6;
   --overlay: rgba(255, 255, 255, 0.04);
   --sidebar-shadow: 1px 0 0 rgba(255, 255, 255, 0.06);
@@ -116,11 +118,11 @@
 }
 
 :root.accent-indigo {
-  --accent: #1e75ff;
+  --accent: #1e90ff;
   --accent-soft: #eff6ff;
-  --accent-active-text: #1d4ed8;
-  --sidebar-accent: #1e75ff;
-  --accent-rgb: 30, 117, 255;
+  --accent-active-text: #1873cc;
+  --sidebar-accent: #1e90ff;
+  --accent-rgb: 30, 144, 255;
 }
 :root.accent-teal {
   --accent: #0d9488;
@@ -152,11 +154,11 @@
 }
 
 .dark.accent-indigo {
-  --accent: #3b82f6;
-  --accent-soft: rgba(59, 130, 246, 0.15);
-  --accent-active-text: #93c5fd;
-  --sidebar-accent: #3b82f6;
-  --accent-rgb: 59, 130, 246;
+  --accent: #1e90ff;
+  --accent-soft: rgba(30, 144, 255, 0.15);
+  --accent-active-text: #7ec8ff;
+  --sidebar-accent: #1e90ff;
+  --accent-rgb: 30, 144, 255;
 }
 .dark.accent-teal {
   --accent: #2dd4bf;
@@ -231,6 +233,8 @@
   --color-pastel-lilac: var(--pastel-lilac);
   --color-pastel-cream: var(--pastel-cream);
   --color-pastel-sky: var(--pastel-sky);
+  --color-pastel-silver: var(--pastel-silver);
+  --color-pastel-silver-bright: var(--pastel-silver-bright);
 }
 
 html,
@@ -239,7 +243,7 @@ body {
 }
 
 body {
-  background: linear-gradient(135deg, #f8fafc 0%, #f0fdfa 50%, #f5f3ff 100%) !important;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 45%, #eef2f6 100%) !important;
   background-attachment: fixed !important;
   color: var(--pastel-text);
   font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif !important;
@@ -316,9 +320,9 @@ h6 {
 .pastel-metric-hero {
   border-radius: 22px;
   border: none;
-  background: linear-gradient(135deg, #1e75ff 0%, #5aa3ff 55%, #8ec5ff 100%);
+  background: #1e90ff;
   color: #ffffff;
-  box-shadow: 0 12px 28px -10px rgba(30, 117, 255, 0.45);
+  box-shadow: 0 12px 28px -10px rgba(30, 144, 255, 0.45);
   padding: 1.25rem 1.5rem;
 }
 
@@ -418,7 +422,7 @@ h6 {
   transition: background 0.2s;
 }
 .leaflet-bar a:hover {
-  background: #f8fafc !important;
+  background: #e8eaed !important;
 }
 .leaflet-control-layers {
   border-radius: 10px !important;

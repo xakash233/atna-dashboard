@@ -28,13 +28,13 @@ export function CustomerDashboard({ data }: CustomerDashboardProps) {
           <div className="flex flex-wrap items-center gap-3 sm:gap-4">
             <AnimatedButton
               type="button"
-              className="rounded-xl border border-neutral-300/80 bg-slate-50/50 px-6 py-2 text-xs font-semibold tracking-wide text-[#6366f1] backdrop-blur-[2px] transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6366f1] dark:border-border dark:bg-surface-elevated dark:text-accent"
+              className="rounded-xl border border-neutral-300/80 bg-slate-50/50 px-6 py-2 text-xs font-semibold tracking-wide text-[#1E90FF] backdrop-blur-[2px] transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1E90FF] dark:border-border dark:bg-surface-elevated dark:text-accent"
             >
               Export Data
             </AnimatedButton>
             <AnimatedButton
               type="button"
-              className="btn-premium rounded-xl bg-[#6366f1] px-6 py-2.5 text-xs font-semibold tracking-wide text-white shadow-[0_10px_15px_-3px_rgba(109,93,246,0.30),0_4px_6px_-4px_rgba(109,93,246,0.30)] transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6366f1] dark:bg-accent dark:text-accent-fg"
+              className="btn-premium rounded-xl bg-[#1E90FF] px-6 py-2.5 text-xs font-semibold tracking-wide text-white shadow-[0_10px_15px_-3px_rgba(30,144,255,0.30),0_4px_6px_-4px_rgba(30,144,255,0.30)] transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1E90FF] dark:bg-accent dark:text-accent-fg"
             >
               + New Customer
             </AnimatedButton>

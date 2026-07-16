@@ -14,10 +14,10 @@ const TONE: Record<
     badgeBorder: "border-slate-600/20",
   },
   indigo: {
-    icon: "text-[#6366f1]",
-    badge: "bg-[#6366f1]/10",
-    badgeText: "text-[#6366f1]",
-    badgeBorder: "border-[#6366f1]/20",
+    icon: "text-[#1E90FF]",
+    badge: "bg-[#1E90FF]/10",
+    badgeText: "text-[#1E90FF]",
+    badgeBorder: "border-[#1E90FF]/20",
   },
   zinc: {
     icon: "text-zinc-500",

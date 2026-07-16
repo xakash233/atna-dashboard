@@ -194,7 +194,7 @@ export function MobileNavBar() {
                     {(["teal", "indigo", "purple", "rose", "amber"] as const).map((color) => {
                       const bgClass = {
                         teal: "bg-[#0d9f8f]",
-                        indigo: "bg-[#6366f1]",
+                        indigo: "bg-[#1E90FF]",
                         purple: "bg-[#a855f7]",
                         rose: "bg-[#f43f5e]",
                         amber: "bg-[#d97706]",

@@ -64,7 +64,7 @@ export function SideNavBar() {
       style={{ boxShadow: "var(--sidebar-shadow)" }}
     >
       <div className="px-4 pb-6">
-        <p className="text-2xl font-black leading-7 text-[#6366f1] dark:bg-gradient-to-r dark:from-fg dark:to-accent dark:bg-clip-text dark:text-transparent">
+        <p className="text-2xl font-black leading-7 text-[#1E90FF] dark:bg-gradient-to-r dark:from-fg dark:to-accent dark:bg-clip-text dark:text-transparent">
           {APP.product}
         </p>
         <p className="mt-0.5 text-sm font-normal leading-5 text-fg-muted">
@@ -83,7 +83,7 @@ export function SideNavBar() {
               className={cn(
                 "sidebar-link-premium relative flex items-center gap-3 rounded-sm px-4 py-3 text-xs font-semibold tracking-wide transition",
                 active
-                  ? "border-r-4 border-[#6366f1] bg-[#6366f1]/10 text-[#6366f1] dark:border-accent dark:bg-accent-soft dark:text-accent-active"
+                  ? "border-r-4 border-[#1E90FF] bg-[#1E90FF]/10 text-[#1E90FF] dark:border-accent dark:bg-accent-soft dark:text-accent-active"
                   : "text-fg-muted hover:bg-overlay hover:text-fg",
               )}
             >
@@ -118,7 +118,7 @@ export function SideNavBar() {
 
         <AnimatedButton
           type="button"
-          className="btn-premium mb-3 w-full rounded-sm bg-[#6366f1] px-4 py-3 text-xs font-semibold tracking-wide text-white shadow-[0_10px_15px_-3px_rgba(109,93,246,0.25)] transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6366f1] dark:bg-accent dark:text-accent-fg"
+          className="btn-premium mb-3 w-full rounded-sm bg-[#1E90FF] px-4 py-3 text-xs font-semibold tracking-wide text-white shadow-[0_10px_15px_-3px_rgba(30,144,255,0.25)] transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1E90FF] dark:bg-accent dark:text-accent-fg"
         >
           Upgrade Node
         </AnimatedButton>

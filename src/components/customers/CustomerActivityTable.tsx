@@ -6,13 +6,13 @@ import type { CustomerActivity, MetricTone } from "@/lib/types";
 import { cn } from "@/lib/cn";
 
 const AVATAR: Record<MetricTone, string> = {
-  indigo: "bg-[#6366f1]/10 text-[#6366f1]",
+  indigo: "bg-[#1E90FF]/10 text-[#1E90FF]",
   slate: "bg-slate-600/10 text-slate-600",
   zinc: "bg-zinc-500/10 text-zinc-500",
 };
 
 const BAR: Record<MetricTone, string> = {
-  indigo: "bg-[#6366f1]",
+  indigo: "bg-[#1E90FF]",
   slate: "bg-slate-600",
   zinc: "bg-zinc-500",
 };
@@ -28,7 +28,7 @@ export function CustomerActivityTable({ customers }: CustomerActivityTableProps)
         <h2 className="text-xl font-medium leading-6 text-fg">Recent Customer Activity</h2>
         <Link
           href="/customers"
-          className="group inline-flex items-center gap-1 text-xs font-semibold tracking-wide text-[#6366f1] transition hover:brightness-110 dark:text-accent"
+          className="group inline-flex items-center gap-1 text-xs font-semibold tracking-wide text-[#1E90FF] transition hover:brightness-110 dark:text-accent"
         >
           View All
           <span aria-hidden className="transition group-hover:translate-x-0.5">

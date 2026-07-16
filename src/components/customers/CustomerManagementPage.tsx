@@ -14,16 +14,16 @@ const TABS: { id: CustomerMgmtTab; label: string }[] = [
 ];
 
 const MOCK_BRANCHES = [
-  { name: "Central HQ", code: "CHQ-01", location: "Pandharpur, MH", manager: "Santhosh Kumar", status: "Active" as const },
-  { name: "Pune Tech Lab", code: "PTL-02", location: "Pune, MH", manager: "Rohan K.", status: "Active" as const },
-  { name: "Mumbai Ops Hub", code: "MOH-03", location: "Mumbai, MH", manager: "Sneha A.", status: "Active" as const },
+  { name: "Central HQ", code: "CHQ-01", location: "Pandharpur, MH", manager: "Santhosh Kumar" },
+  { name: "Pune Tech Lab", code: "PTL-02", location: "Pune, MH", manager: "Rohan K." },
+  { name: "Mumbai Ops Hub", code: "MOH-03", location: "Mumbai, MH", manager: "Sneha A." },
 ];
 
 const MOCK_USERS = [
-  { name: "Santhosh Kumar", email: "santhoshatna@yopmail.com", role: "QA SuperAdmin", status: "Active" as const },
-  { name: "Rohan K.", email: "rohan@yopmail.com", role: "QA Engineer", status: "Active" as const },
-  { name: "Sneha A.", email: "sneha@yopmail.com", role: "Operations Lead", status: "Active" as const },
-  { name: "Amit S.", email: "amit@yopmail.com", role: "Viewer", status: "Inactive" as const },
+  { name: "Santhosh Kumar", email: "santhoshatna@yopmail.com", role: "QA SuperAdmin" },
+  { name: "Rohan K.", email: "rohan@yopmail.com", role: "QA Engineer" },
+  { name: "Sneha A.", email: "sneha@yopmail.com", role: "Operations Lead" },
+  { name: "Amit S.", email: "amit@yopmail.com", role: "Viewer" },
 ];
 
 const MOCK_ROLES = [
@@ -36,35 +36,18 @@ const MOCK_ROLES = [
 const cardShell =
   "rounded-2xl border border-[#e2e8f0] bg-white shadow-[0_1px_3px_rgba(0,0,0,0.01),0_8px_16px_rgba(0,0,0,0.01)] transition-all duration-300";
 
-/** Matches Organization overview field hover */
+/** Dodger blue hover on grey surfaces */
 const indigoHover =
-  "hover:border-[#6366f1]/40 hover:bg-white hover:shadow-[0_8px_20px_-10px_rgba(99,102,241,0.25)]";
+  "hover:border-[#1E90FF]/40 hover:bg-[#E8F4FF] hover:shadow-[0_8px_20px_-10px_rgba(30,144,255,0.35)]";
 const indigoHoverShadowSoft =
-  "hover:border-[#6366f1]/50 hover:shadow-[0_12px_24px_rgba(99,102,241,0.08)]";
-const indigoBar = "from-[#6366f1] to-[#00d8a6]";
-const indigoLabelHover = "group-hover:text-[#6366f1]";
-const indigoActiveBorder = "border-[#6366f1]/40 bg-white";
+  "hover:border-[#1E90FF]/40 hover:shadow-[0_12px_24px_rgba(30,144,255,0.16)]";
+const indigoBar = "bg-[#1E90FF]";
+const indigoLabelHover = "group-hover:text-[#1E90FF]";
+const indigoActiveBorder = "border-[#1E90FF]/40 bg-white";
 const indigoFocusRow =
-  "translate-x-1 border-[#6366f1]/40 bg-white shadow-[0_8px_20px_-10px_rgba(99,102,241,0.25)]";
+  "translate-x-1 border-[#1E90FF]/40 bg-[#E8F4FF] shadow-[0_8px_20px_-10px_rgba(30,144,255,0.35)]";
 const indigoUnderline =
-  "absolute bottom-0 left-0 right-0 h-0.5 origin-left scale-x-0 bg-gradient-to-r from-[#6366f1] to-[#00d8a6] transition-transform duration-300 group-hover:scale-x-100";
-
-function StatusPill({ status }: { status: "Active" | "Inactive" }) {
-  const active = status === "Active";
-  return (
-    <span
-      className={cn(
-        "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide",
-        active
-          ? "bg-[#e6fbf7] text-[#0f766e] border border-[#a7f3d0]"
-          : "bg-[#f1f5f9] text-[#64748b] border border-[#e2e8f0]",
-      )}
-    >
-      <span className={cn("size-1.5 rounded-full", active ? "bg-[#00d8a6]" : "bg-[#94a3b8]")} />
-      {status}
-    </span>
-  );
-}
+  "absolute bottom-0 left-0 right-0 h-0.5 origin-left scale-x-0 bg-[#1E90FF] transition-transform duration-300 group-hover:scale-x-100";
 
 function SummaryCards() {
   const items = [
@@ -78,13 +61,13 @@ function SummaryCards() {
       id: "branch",
       label: "Branches",
       value: String(MOCK_BRANCHES.length),
-      hint: "All active",
+      hint: "Registered sites",
     },
     {
       id: "users",
       label: "Users",
       value: String(MOCK_USERS.length),
-      hint: `${MOCK_USERS.filter((u) => u.status === "Active").length} active`,
+      hint: "Workspace members",
     },
     {
       id: "roles",
@@ -107,7 +90,7 @@ function SummaryCards() {
           >
             <div
               className={cn(
-                "absolute bottom-0 left-0 right-0 h-1 origin-left scale-x-0 bg-gradient-to-r transition-transform duration-500 group-hover:scale-x-100",
+                "absolute bottom-0 left-0 right-0 h-1 origin-left scale-x-0 transition-transform duration-500 group-hover:scale-x-100",
                 indigoBar,
               )}
             />
@@ -147,7 +130,6 @@ function OrganizationOverview({ org }: { org: CustomerMgmtOrg }) {
               Core identity and hierarchy details
             </p>
           </div>
-          <StatusPill status="Active" />
         </div>
 
         <div className="grid min-h-0 flex-1 grid-cols-1 content-start gap-2.5 sm:grid-cols-2">
@@ -183,7 +165,7 @@ function OrganizationOverview({ org }: { org: CustomerMgmtOrg }) {
               Created by
             </p>
             <div className="mt-2 flex items-center gap-3">
-              <div className="grid size-9 place-items-center rounded-full bg-gradient-to-br from-[#6366f1] to-[#00d8a6] text-[11px] font-bold text-white transition-transform duration-300 group-hover:scale-110">
+              <div className="grid size-9 place-items-center rounded-full bg-[#1E90FF] text-[11px] font-bold text-white transition-transform duration-300 group-hover:scale-110">
                 {org.createdByInitial}
               </div>
               <div>
@@ -200,6 +182,7 @@ function OrganizationOverview({ org }: { org: CustomerMgmtOrg }) {
 
 function BranchPanel() {
   const [selected, setSelected] = useState<string | null>(MOCK_BRANCHES[0]?.code ?? null);
+  const [hovered, setHovered] = useState<string | null>(null);
 
   return (
     <section className={cn(cardShell, "flex h-full min-h-0 flex-1 flex-col p-4 sm:p-5")}>
@@ -210,7 +193,7 @@ function BranchPanel() {
         </div>
         <button
           type="button"
-          className="overflow-hidden rounded-full border-0 bg-gradient-to-r from-[#6366f1] to-[#00d8a6] px-4 py-2 text-[10px] font-semibold text-white shadow-sm transition-all duration-200 hover:scale-[1.02] active:scale-95"
+          className="overflow-hidden rounded-full border-0 bg-[#1E90FF] px-4 py-2 text-[10px] font-semibold text-white shadow-sm transition-all duration-200 hover:scale-[1.02] hover:brightness-105 active:scale-95"
         >
           + Add Branch
         </button>
@@ -218,29 +201,31 @@ function BranchPanel() {
 
       <div className="grid min-h-0 flex-1 grid-cols-1 content-start gap-2.5 md:grid-cols-3">
         {MOCK_BRANCHES.map((b) => {
-          const active = selected === b.code;
+          // Hover wins: only one card highlighted at a time
+          const active = (hovered ?? selected) === b.code;
           return (
             <button
               key={b.code}
               type="button"
               onClick={() => setSelected(b.code)}
+              onMouseEnter={() => setHovered(b.code)}
+              onMouseLeave={() => setHovered(null)}
               className={cn(
                 "group relative overflow-hidden rounded-xl border p-4 text-left transition-all duration-300 hover:-translate-y-1",
                 active
-                  ? "border-[#6366f1]/50 bg-gradient-to-b from-white to-[#eef2ff]/60 shadow-[0_10px_24px_-12px_rgba(99,102,241,0.35)]"
-                  : cn("border-[#e2e8f0] bg-[#f8fafc]", indigoHover),
+                  ? "border-[#1E90FF]/50 bg-[#E8F4FF]/60 shadow-[0_10px_24px_-12px_rgba(30,144,255,0.35)]"
+                  : "border-[#e2e8f0] bg-[#f8fafc]",
               )}
             >
               <div className="flex items-start justify-between gap-2">
                 <p className="text-[12px] font-semibold text-[#0f172a]">{b.name}</p>
-                <StatusPill status={b.status} />
               </div>
-              <p className="mt-2 font-mono text-[10px] font-semibold text-[#6366f1]">{b.code}</p>
+              <p className="mt-2 font-mono text-[10px] font-semibold text-[#1E90FF]">{b.code}</p>
               <p className="mt-2 text-[10px] font-medium text-[#64748b]">{b.location}</p>
               <p className="mt-1 text-[10px] font-semibold text-[#0f172a]">Mgr · {b.manager}</p>
               <div
                 className={cn(
-                  indigoUnderline,
+                  "absolute bottom-0 left-0 right-0 h-0.5 origin-left scale-x-0 bg-[#1E90FF] transition-transform duration-300",
                   active && "scale-x-100",
                 )}
               />
@@ -266,7 +251,7 @@ function UsersPanel() {
         </div>
         <button
           type="button"
-          className="overflow-hidden rounded-full border-0 bg-gradient-to-r from-[#6366f1] to-[#00d8a6] px-4 py-2 text-[10px] font-semibold text-white shadow-sm transition-all duration-200 hover:scale-[1.02] active:scale-95"
+          className="overflow-hidden rounded-full border-0 bg-[#1E90FF] px-4 py-2 text-[10px] font-semibold text-white shadow-sm transition-all duration-200 hover:scale-[1.02] hover:brightness-105 active:scale-95"
         >
           + Invite User
         </button>
@@ -292,7 +277,7 @@ function UsersPanel() {
                   className={cn(
                     "grid size-8 place-items-center rounded-full text-[10px] font-bold transition-all duration-300",
                     on
-                      ? "scale-110 bg-gradient-to-br from-[#6366f1] to-[#00d8a6] text-white"
+                      ? "scale-110 bg-[#1E90FF] text-white"
                       : "bg-[#e2e8f0] text-[#475569]",
                   )}
                 >
@@ -307,7 +292,6 @@ function UsersPanel() {
                 <span className="rounded-full border border-[#e2e8f0] bg-white px-2 py-0.5 text-[9px] font-semibold text-[#475569]">
                   {u.role}
                 </span>
-                <StatusPill status={u.status} />
               </div>
             </li>
           );
@@ -329,7 +313,7 @@ function RolesPanel() {
         </div>
         <button
           type="button"
-          className="overflow-hidden rounded-full border-0 bg-gradient-to-r from-[#6366f1] to-[#00d8a6] px-4 py-2 text-[10px] font-semibold text-white shadow-sm transition-all duration-200 hover:scale-[1.02] active:scale-95"
+          className="overflow-hidden rounded-full border-0 bg-[#1E90FF] px-4 py-2 text-[10px] font-semibold text-white shadow-sm transition-all duration-200 hover:scale-[1.02] hover:brightness-105 active:scale-95"
         >
           + New Role
         </button>
@@ -353,7 +337,7 @@ function RolesPanel() {
               <p className="mt-2 text-[10px] font-medium leading-relaxed text-[#64748b]">{r.permissions}</p>
               <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-[#e2e8f0]">
                 <div
-                  className={cn("h-full rounded-full bg-gradient-to-r transition-all duration-700", indigoBar)}
+                  className={cn("h-full rounded-full transition-all duration-700", indigoBar)}
                   style={{ width: `${Math.min(r.users * 18, 100)}%` }}
                 />
               </div>
@@ -383,7 +367,7 @@ export function CustomerManagementPage({ data }: { data: CustomerMgmtData }) {
           </div>
           <button
             type="button"
-            className="inline-flex self-start items-center overflow-hidden rounded-full border-0 bg-gradient-to-r from-[#6366f1] to-[#00d8a6] px-5 py-2.5 text-[10px] font-semibold text-white shadow-md transition-all duration-200 hover:scale-[1.02] active:scale-95 sm:self-center"
+            className="inline-flex self-start items-center overflow-hidden rounded-full border-0 bg-[#1E90FF] px-5 py-2.5 text-[10px] font-semibold text-white shadow-md transition-all duration-200 hover:scale-[1.02] hover:brightness-105 active:scale-95 sm:self-center"
           >
             Modify Settings
           </button>
@@ -411,7 +395,7 @@ export function CustomerManagementPage({ data }: { data: CustomerMgmtData }) {
                 onClick={() => setTab(item.id)}
                 className={cn(
                   "relative z-10 w-full rounded-lg px-3 py-2.5 text-center text-[11px] font-semibold transition-colors duration-200",
-                  active ? "text-[#0f172a]" : "text-[#64748b] hover:text-[#6366f1]",
+                  active ? "text-[#0f172a]" : "text-[#64748b] hover:text-[#1E90FF]",
                 )}
               >
                 {active && (

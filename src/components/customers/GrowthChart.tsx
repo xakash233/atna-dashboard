@@ -23,7 +23,7 @@ export function GrowthChart({ data }: GrowthChartProps) {
   useEffect(() => setMounted(true), []);
   const isDark = !mounted || resolvedTheme === "dark";
 
-  const indigo = isDark ? "#c8bfff" : "#6366f1";
+  const indigo = isDark ? "#7ec8ff" : "#1E90FF";
   const slate = isDark ? "#94a3b8" : "#64748b";
   const tick = isDark ? "#c9c4d7" : "#52525b";
   const grid = isDark ? "rgba(71,69,85,0.35)" : "rgba(212,212,216,0.55)";
@@ -41,7 +41,7 @@ export function GrowthChart({ data }: GrowthChartProps) {
           <span className="sr-only">Time range</span>
           <select
             defaultValue="30"
-            className="appearance-none rounded-md border border-neutral-300 bg-slate-50/80 py-2 pl-4 pr-10 text-sm text-fg outline-none transition focus:border-[#6366f1]/50 focus:ring-2 focus:ring-[#6366f1]/25 dark:border-border dark:bg-surface-elevated"
+            className="appearance-none rounded-md border border-neutral-300 bg-slate-50/80 py-2 pl-4 pr-10 text-sm text-fg outline-none transition focus:border-[#1E90FF]/50 focus:ring-2 focus:ring-[#1E90FF]/25 dark:border-border dark:bg-surface-elevated"
           >
             <option value="7">Last 7 Days</option>
             <option value="30">Last 30 Days</option>
